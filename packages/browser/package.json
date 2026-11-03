@@ -1,6 +1,6 @@
 {
 	"name": "@pepreviewpro/browser",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "First-party attribution and reviews-seen cookies for PepReviewPro stores. No dependencies, sends nothing.",
 	"license": "SEE LICENSE IN LICENSE",
 	"author": "PepReviewPro <support@pepreviewpro.com>",

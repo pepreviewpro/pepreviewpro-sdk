@@ -1,6 +1,6 @@
 {
 	"name": "@pepreviewpro/cli",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Set up, check, and feed a PepReviewPro store from the command line.",
 	"license": "SEE LICENSE IN LICENSE",
 	"author": "PepReviewPro <support@pepreviewpro.com>",

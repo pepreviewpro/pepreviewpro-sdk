@@ -1,6 +1,6 @@
 {
 	"name": "@pepreviewpro/react",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "PepReviewPro widgets, the review form, and headless hooks for React 18 and 19. Takes no key.",
 	"license": "SEE LICENSE IN LICENSE",
 	"author": "PepReviewPro <support@pepreviewpro.com>",
