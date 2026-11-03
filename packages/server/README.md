@@ -81,6 +81,8 @@ export async function POST(request: Request) {
 
 Ids can be strings, like `ORD-1001` and `sku-123`. Every answer echoes your own id.
 
+A review request goes out when an order reaches the status your dashboard sets under **Widgets**, **Integrations**, **Request reviews when an order is**: **Completed** by default, or **Paid**. Send `"completed"` when the order ships, or switch that setting to **Paid** if your checkout only knows payment.
+
 ## API
 
 ### `new PepReviewPro(options)`

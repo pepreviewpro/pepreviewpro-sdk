@@ -74,7 +74,7 @@ Install with the project's own package manager. Look for `pnpm-lock.yaml`, `yarn
 4. **A webhook is a reason to refetch, not data to cache.** Deliveries repeat and arrive out of order. On Next.js, the shipped route revalidates the cache tags and nothing else. On other stacks, clear your cache and read again. Drop repeats by `event.id`. Pass the raw body to `webhooks.verify`, `await request.text()`, never parsed JSON.
 5. **Pick the `@pepreviewpro/next` entry by `cacheComponents`.** When `next.config` sets `cacheComponents: true`, import `getReviews`, `getAggregate`, and `ReviewsJsonLd` from `@pepreviewpro/next/cache-components`. Otherwise, and always on Next.js 15, import them from `@pepreviewpro/next`. The `cache-components` entry uses `"use cache"`, and an app without Cache Components fails its build on it.
 6. **Ids are the store's own, and may be strings.** Order ids like `ORD-1001` and product ids like `sku-123` are fine as they are. Never `Number()` or `parseInt` them, and never invent new ones. Use the same product id in line items, the catalog, `productRef`, and the review form, or reviews will not line up with products. `store` is the store's slug, like `example-store`, never a UUID.
-7. **Send an order again when its status changes.** `orders.upsert` creates or updates by id, so a repeat is safe. A review request is queued when the order reaches the store's trigger status, `completed` unless the store chose `paid` in the dashboard. `refunded` or `cancelled` stops a request that has not gone out yet.
+7. **Send an order again when its status changes.** `orders.upsert` creates or updates by id, so a repeat is safe. A review request is queued when the order reaches the store's trigger status, `completed` unless the store chose `paid` in the dashboard under **Widgets**, **Integrations**, **Request reviews when an order is**. A store that sends `paid` with the default setting gets no review requests, so match the two. `refunded` or `cancelled` stops a request that has not gone out yet.
 8. **Finish with `npx @pepreviewpro/cli doctor`.** It checks the key, the store, the installed packages, the webhook secret, and scans the client build for a leaked key. It exits 1 on a failure.
 
 ### Environment variables
@@ -386,6 +386,7 @@ List only what you built. Without `attribution`, the card warns that **Insights*
 - [ ] No file with `"use client"`, and nothing it imports, imports `@pepreviewpro/server` or `@pepreviewpro/next`.
 - [ ] The key appears only as `process.env.PEPREVIEWPRO_API_KEY` in server code. No `NEXT_PUBLIC_`, `VITE_`, `PUBLIC_`, or `REACT_APP_` name holds it.
 - [ ] Checkout calls `orders.upsert` with `{ request }` or `checkoutContext(...)`, sends `email` and `lineItems`, and runs again on status changes.
+- [ ] The status checkout sends matches the store's **Request reviews when an order is** setting: `completed` for the default, or `paid` if the store switched it.
 - [ ] Past orders go through `orders.import` or `import-orders`, never through `orders.upsert` in a loop, and never with `sendEmail`.
 - [ ] Product ids are the same strings or numbers everywhere: line items, catalog, `productRef`, the form.
 - [ ] On Next.js, every `getReviews`, `getAggregate`, and `ReviewsJsonLd` comes from the entry that matches `cacheComponents`.
