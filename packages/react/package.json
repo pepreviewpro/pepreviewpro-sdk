@@ -1,0 +1,56 @@
+{
+	"name": "@pepreviewpro/react",
+	"version": "0.1.0",
+	"description": "PepReviewPro widgets, the review form, and headless hooks for React 18 and 19. Takes no key.",
+	"license": "SEE LICENSE IN LICENSE",
+	"author": "PepReviewPro <support@pepreviewpro.com>",
+	"homepage": "https://pepreviewpro.com/help/show-reviews-with-react",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pepreviewpro/pepreviewpro-sdk.git",
+		"directory": "packages/react"
+	},
+	"bugs": {
+		"email": "support@pepreviewpro.com"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"AGENTS.md",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown"
+	},
+	"dependencies": {
+		"@pepreviewpro/browser": "workspace:*",
+		"@pepreviewpro/core": "workspace:*"
+	},
+	"peerDependencies": {
+		"react": "^18.2.0 || ^19.0.0",
+		"react-dom": "^18.2.0 || ^19.0.0"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"pepreviewpro",
+		"reviews",
+		"react",
+		"widgets"
+	]
+}

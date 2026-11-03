@@ -1,0 +1,43 @@
+{
+	"name": "@pepreviewpro/cli",
+	"version": "0.1.0",
+	"description": "Set up, check, and feed a PepReviewPro store from the command line.",
+	"license": "SEE LICENSE IN LICENSE",
+	"author": "PepReviewPro <support@pepreviewpro.com>",
+	"homepage": "https://pepreviewpro.com/help/connect-a-store-without-wordpress",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pepreviewpro/pepreviewpro-sdk.git",
+		"directory": "packages/cli"
+	},
+	"bugs": {
+		"email": "support@pepreviewpro.com"
+	},
+	"type": "module",
+	"bin": {
+		"pepreviewpro": "./dist/index.mjs"
+	},
+	"files": [
+		"dist",
+		"AGENTS.md",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown"
+	},
+	"dependencies": {
+		"@pepreviewpro/core": "workspace:*",
+		"@pepreviewpro/server": "workspace:*"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"pepreviewpro",
+		"cli"
+	]
+}

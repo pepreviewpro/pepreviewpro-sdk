@@ -1,0 +1,109 @@
+{
+	"endpoint": "widget-data-product-ref",
+	"source": "written from the 2026-11-02 SDK wire contract; replace with the app's recording once step 1 ships",
+	"cases": [
+		{
+			"name": "one product by the store's own id",
+			"request": {
+				"method": "GET",
+				"query": "site_id=magnolia-store&product_ref=sku-101&limit=20",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"cache-control": "no-store, no-cache, must-revalidate",
+					"x-store-scope": "magnolia-store"
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "magnolia-store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000016",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000016",
+						"slug": "magnolia-store",
+						"name": "Magnolia Store",
+						"accent_color": "#b91c1c",
+						"widget_logo_url": null,
+						"public_page_enabled": true,
+						"app_url": "https://pepreviewpro.com"
+					},
+					"settings": {
+						"theme": "light",
+						"autoplay_speed": 5,
+						"ticker_speed": 8,
+						"show_aggregate": true,
+						"show_distribution": true,
+						"show_verified_badge": true,
+						"min_rating_display": 3,
+						"cache_bust_token": "2026-11-01T09:00:00.000000+00:00"
+					},
+					"reviews": [
+						{
+							"id": "1e2d3c4b-0000-4000-8000-000000000001",
+							"reviewer_name": "Sam D.",
+							"rating": 5,
+							"title": "Review 1",
+							"body": "Body of review 1. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-10-01T14:21:07.512934+00:00",
+							"product_ref": "sku-101",
+							"order_ref": null,
+							"updated_at": "2026-10-01T15:00:00.000000+00:00"
+						},
+						{
+							"id": "1e2d3c4b-0000-4000-8000-000000000002",
+							"reviewer_name": "Kai S.",
+							"rating": 2,
+							"title": null,
+							"body": "Body of review 2. Shipped fast and matched the label.",
+							"is_verified": false,
+							"created_at": "2026-10-02T14:21:07.512934+00:00",
+							"product_ref": "sku-101",
+							"order_ref": null,
+							"updated_at": "2026-10-02T15:00:00.000000+00:00"
+						},
+						{
+							"id": "1e2d3c4b-0000-4000-8000-000000000003",
+							"reviewer_name": "Sam T.",
+							"rating": 4,
+							"title": "Review 3",
+							"body": "Body of review 3. </script><script>alert(1)</script>",
+							"is_verified": true,
+							"created_at": "2026-10-03T14:21:07.512934+00:00",
+							"product_ref": "sku-101",
+							"order_ref": null,
+							"updated_at": "2026-10-03T15:00:00.000000+00:00"
+						},
+						{
+							"id": "1e2d3c4b-0000-4000-8000-000000000004",
+							"reviewer_name": "Riley K.",
+							"rating": 5,
+							"title": null,
+							"body": "Body of review 4. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-10-04T14:21:07.512934+00:00",
+							"product_ref": "sku-101",
+							"order_ref": null,
+							"updated_at": "2026-10-04T15:00:00.000000+00:00"
+						}
+					],
+					"aggregate": {
+						"average_rating": 4,
+						"score": 3.86,
+						"total": 4,
+						"distribution": {
+							"1": 0,
+							"2": 1,
+							"3": 0,
+							"4": 1,
+							"5": 2
+						}
+					}
+				}
+			}
+		}
+	]
+}

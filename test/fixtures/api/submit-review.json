@@ -1,0 +1,157 @@
+{
+	"endpoint": "submit-review",
+	"source": "written from the old edge function source; replace with a recording before cutover",
+	"cases": [
+		{
+			"name": "a review is saved and waits for its author",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"apikey": "anon",
+					"Authorization": "Bearer anon"
+				},
+				"body": {
+					"site_id": "00000000-0000-4000-8000-000000000001",
+					"reviewer_name": "Casey",
+					"reviewer_email": "casey@example.com",
+					"rating": 5,
+					"title": "Great",
+					"body": "Arrived quickly and well packed, would order again.",
+					"product_id": 88,
+					"order_id": null
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": true,
+					"message": "Thank you! Please check your email to verify your review.",
+					"review_id": "00000000-0000-4000-8000-000000000015"
+				},
+				"volatile": [
+					"review_id"
+				]
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "the demo store saves nothing",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {},
+				"body": {
+					"site_id": "demo",
+					"reviewer_name": "Casey",
+					"reviewer_email": "casey@example.com",
+					"rating": 5,
+					"body": "Hello there"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": true,
+					"message": "Thank you! This is a demo preview — no review was saved."
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "missing fields",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {},
+				"body": {
+					"site_id": "00000000-0000-4000-8000-000000000001",
+					"rating": 5
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"message": "Missing required fields"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a rating out of range",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {},
+				"body": {
+					"site_id": "00000000-0000-4000-8000-000000000001",
+					"reviewer_name": "C",
+					"reviewer_email": "c@example.com",
+					"rating": 6,
+					"body": "x"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"message": "Rating must be between 1 and 5"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a body that is not JSON",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {},
+				"body": "nope"
+			},
+			"response": {
+				"status": 500,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"message": "Internal server error"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

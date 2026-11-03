@@ -1,0 +1,346 @@
+{
+	"endpoint": "api-v1-my-orders",
+	"source": "written from the old edge function source; replace with a recording before cutover",
+	"cases": [
+		{
+			"name": "one order queues the store's campaign",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store_id": "example-store",
+					"order": {
+						"id": "1001",
+						"email": "New.Buyer@Example.com",
+						"name": "Garcia  Blake Reyes",
+						"products": [
+							{
+								"id": 88,
+								"name": "BPC-157"
+							},
+							{
+								"id": "91",
+								"name": "TB-500"
+							}
+						]
+					}
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": true,
+					"store_id": "example-store",
+					"results": [
+						{
+							"order_id": 1001,
+							"queued": 1,
+							"duplicates": 0
+						}
+					]
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a batch, where a store with no campaign is skipped",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				},
+				"body": {
+					"store_id": "laurel-store",
+					"orders": [
+						{
+							"id": 1,
+							"email": "a@example.com"
+						},
+						{
+							"id": 2,
+							"email": "b@example.com",
+							"name": null
+						}
+					]
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": true,
+					"store_id": "laurel-store",
+					"results": [
+						{
+							"order_id": 1,
+							"queued": 0,
+							"duplicates": 0,
+							"skipped_reason": "no_active_campaign"
+						},
+						{
+							"order_id": 2,
+							"queued": 0,
+							"duplicates": 0,
+							"skipped_reason": "no_active_campaign"
+						}
+					]
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "neither order nor orders",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				},
+				"body": {
+					"store_id": "example-store"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"error": "Invalid request body.",
+					"details": {
+						"formErrors": [
+							"Provide `order` or `orders`"
+						],
+						"fieldErrors": {}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "field errors in zod 3 wording",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				},
+				"body": {
+					"store_id": "",
+					"order": {
+						"id": -1,
+						"email": "not-an-email",
+						"products": "none"
+					}
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"error": "Invalid request body.",
+					"details": {
+						"formErrors": [],
+						"fieldErrors": {
+							"store_id": [
+								"String must contain at least 1 character(s)"
+							],
+							"order": [
+								"order.id must be a positive integer",
+								"Invalid email",
+								"Expected array, received string"
+							]
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a body that is not JSON",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				},
+				"body": "{not json"
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"error": "Invalid request body.",
+					"details": {
+						"formErrors": [
+							"Expected object, received null"
+						],
+						"fieldErrors": {}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store the key does not own",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				},
+				"body": {
+					"store_id": "olive-store",
+					"order": {
+						"id": 5,
+						"email": "c@example.com"
+					}
+				}
+			},
+			"response": {
+				"status": 404,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"error": "Store not found for this API key."
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a uuid store_id",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				},
+				"body": {
+					"store_id": "00000000-0000-4000-8000-000000000001",
+					"order": {
+						"id": 5,
+						"email": "c@example.com"
+					}
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"error": "store_id must be a store slug (e.g. `example-store`), not an internal UUID."
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "GET is not allowed",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 405,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"error": "Method not allowed"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "neither order nor orders, with its code",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				},
+				"body": {
+					"store_id": "example-store"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"error": "Invalid request body.",
+					"code": "invalid_body",
+					"details": {
+						"formErrors": [
+							"Provide `order` or `orders`"
+						],
+						"fieldErrors": {}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

@@ -1,0 +1,57 @@
+name: Release
+
+# The npm trusted publisher for every @pepreviewpro package names this file, release.yml. Renaming it breaks publishing.
+on:
+ push:
+  branches: [main]
+
+permissions:
+ contents: write
+ pull-requests: write
+ id-token: write
+
+concurrency:
+ group: release
+ cancel-in-progress: false
+
+jobs:
+ release:
+  if: github.repository == 'pepreviewpro/pepreviewpro-sdk'
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v5
+     with:
+      fetch-depth: 0
+      lfs: true
+   - uses: pnpm/action-setup@v4
+   - uses: actions/setup-node@v5
+     with:
+      node-version: 24
+      registry-url: https://registry.npmjs.org
+      package-manager-cache: false
+   - name: npm 11.5.1 or later, for trusted publishing
+     run: npm install --global npm@11
+   - run: pnpm install --frozen-lockfile
+   - name: Find versions not on npm yet
+     id: status
+     run: pnpm release:status
+   - name: Check everything before publishing
+     if: steps.status.outputs.pending == 'true'
+     run: |
+      pnpm lint
+      pnpm typecheck
+      pnpm test
+      pnpm build
+      pnpm size
+      pnpm docs:snippets
+      pnpm pack:check
+   - name: Open the Version Packages pull request, or publish what it versioned
+     uses: changesets/action@v1
+     with:
+      version: pnpm changeset version
+      publish: pnpm release:publish
+      title: Version Packages
+      commit: Version Packages
+      createGithubReleases: true
+     env:
+      GITHUB_TOKEN: ${{ github.token }}

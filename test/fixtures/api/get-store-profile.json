@@ -1,0 +1,152 @@
+{
+	"endpoint": "get-store-profile",
+	"source": "written from the old edge function source; replace with a recording before cutover",
+	"cases": [
+		{
+			"name": "a public store",
+			"request": {
+				"method": "GET",
+				"query": "site_id=example-store",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"cache-control": "no-store, no-cache, must-revalidate",
+					"vary": "Origin, X-Store-Scope",
+					"x-store-scope": "example-store",
+					"etag": "W/\"store-profile:example-store\""
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "example-store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000001",
+						"slug": "example-store",
+						"name": "Example Store",
+						"wp_url": "https://store.example",
+						"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+						"widget_logo_url": null,
+						"banner_url": null,
+						"accent_color": "#1f6feb",
+						"business_description": "Research peptides, tested in the US."
+					},
+					"widget_settings": {
+						"theme": "dark",
+						"display_mode": "carousel",
+						"autoplay_speed": 7,
+						"transition_type": "fade",
+						"show_aggregate": true,
+						"show_distribution": true,
+						"show_dates": true,
+						"show_verified_badge": true,
+						"min_rating_display": 2,
+						"auto_approve_verified": true,
+						"ticker_speed": 12
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"cache-control",
+				"vary",
+				"x-store-scope",
+				"etag"
+			]
+		},
+		{
+			"name": "a store without widget settings, by name key",
+			"request": {
+				"method": "GET",
+				"query": "site_id=Olive-Store",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"cache-control": "no-store, no-cache, must-revalidate",
+					"vary": "Origin, X-Store-Scope",
+					"x-store-scope": "Olive-Store",
+					"etag": "W/\"store-profile:Olive-Store\""
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "Olive-Store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000002",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000002",
+						"slug": "olive-store",
+						"name": "Olive Store",
+						"wp_url": "https://olive-store.example",
+						"logo_url": null,
+						"widget_logo_url": "https://cdn.pepreviewpro.com/logos/plus-mark.png",
+						"banner_url": "https://cdn.pepreviewpro.com/banners/plus.png",
+						"accent_color": "#c0392b",
+						"business_description": null
+					},
+					"widget_settings": null
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"cache-control",
+				"vary",
+				"x-store-scope",
+				"etag"
+			]
+		},
+		{
+			"name": "a private store",
+			"request": {
+				"method": "GET",
+				"query": "site_id=laurel-store",
+				"headers": {}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"message": "Store profile is not public"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "no site_id",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"message": "site_id is required"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

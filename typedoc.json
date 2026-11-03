@@ -1,0 +1,18 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"name": "PepReviewPro SDK",
+	"entryPointStrategy": "packages",
+	"entryPoints": ["packages/core", "packages/server", "packages/browser", "packages/react", "packages/next", "packages/ai"],
+	"packageOptions": {
+		"entryPoints": ["src/index.ts"],
+		"tsconfig": "../../tsconfig.json",
+		"excludeInternal": true
+	},
+	"readme": "docs/README.md",
+	"projectDocuments": ["docs/guides/*.md"],
+	"out": "docs/api",
+	"excludePrivate": true,
+	"githubPages": false,
+	"treatWarningsAsErrors": false,
+	"highlightLanguages": ["astro", "bash", "css", "html", "javascript", "json", "jsx", "sh", "ts", "tsx", "typescript"]
+}

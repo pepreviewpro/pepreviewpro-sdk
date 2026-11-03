@@ -1,0 +1,108 @@
+PepReviewPro SDK License
+
+Copyright (c) 2026 KJB LLC. All rights reserved.
+
+The source code in this repository is public so you can read it. It is not open
+source. This license sets out what you may do with it.
+
+1. Definitions
+
+   "Software" means the source code, compiled code, type definitions,
+   documentation, and examples in this repository, and the packages published
+   from it under the @pepreviewpro scope.
+
+   "Service" means the PepReviewPro platform and its APIs, operated by KJB LLC,
+   a New Mexico limited liability company ("we", "us"), at
+   https://pepreviewpro.com.
+
+   "Your Application" means a website, app, service, or tool that you operate,
+   or that you build for a client, and that connects to the Service.
+
+2. License grant
+
+   Subject to this license, we grant you a worldwide, royalty-free,
+   non-exclusive, non-transferable, non-sublicensable license, for as long as
+   you use the Software with the Service, to:
+
+   (a) install, use, and run the Software to connect Your Application to the
+       Service;
+
+   (b) combine the Software with Your Application, including by bundling,
+       transpiling, minifying, and tree-shaking it as part of a build;
+
+   (c) distribute the Software in that combined form, as part of Your
+       Application, to the users of Your Application, including in code
+       delivered to their browsers or devices; and
+
+   (d) read and study the Software, and modify it privately to debug or fix a
+       problem in Your Application. A modified copy may be distributed only as
+       part of Your Application under (c).
+
+3. Restrictions
+
+   You may not:
+
+   (a) use the Software, or any part of it, with a service other than the
+       Service, or to build a product that replaces or competes with the
+       Service;
+
+   (b) distribute, publish, sublicense, sell, or rent the Software on its own,
+       or as a library, SDK, or package, whether modified or not;
+
+   (c) remove or change the copyright and license notices in the Software's
+       source files and package metadata, except where a build tool strips
+       comments from compiled output;
+
+   (d) use the Software to access the Service in a way its terms forbid, or to
+       get around the Service's limits or security; or
+
+   (e) use PepReviewPro's name or logos, except to say accurately that Your
+       Application works with PepReviewPro.
+
+4. Third-party software
+
+   The Software depends on packages published by others under their own
+   licenses. Those licenses, not this one, govern those packages.
+
+5. The Service
+
+   Your use of the Service, including your API keys and the data you send and
+   receive, is governed by the PepReviewPro Terms of Service at
+   https://pepreviewpro.com/terms. Keep your API keys secret and on your
+   server.
+
+6. Feedback
+
+   If you send us suggestions about the Software, we may use them without any
+   obligation to you.
+
+7. Termination
+
+   This license ends automatically if you breach it and do not fix the breach
+   within 30 days of our notice, or when your access to the Service ends. When
+   it ends, you must stop using and distributing the Software. Copies of Your
+   Application that you distributed to its users before then may stay with
+   those users.
+
+8. No warranty
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+   PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+9. Limitation of liability
+
+   TO THE EXTENT THE LAW ALLOWS, WE WILL NOT BE LIABLE FOR ANY INDIRECT,
+   INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOST
+   PROFITS, REVENUE, OR DATA, ARISING FROM THE SOFTWARE OR THIS LICENSE. OUR
+   TOTAL LIABILITY UNDER THIS LICENSE WILL NOT EXCEED ONE HUNDRED US DOLLARS.
+
+10. General
+
+   This license is governed by the laws of the State of New Mexico, United
+   States, without regard to its conflict of laws rules. We may publish a new
+   version of this license. A new version applies to releases of the Software
+   published under it. If any part of this license cannot be enforced, the rest
+   still applies.
+
+Questions about this license: support@pepreviewpro.com

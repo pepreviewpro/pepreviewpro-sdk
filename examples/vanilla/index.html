@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Reviews</title>
+	</head>
+	<body>
+		<a href="#main-content">Skip to content</a>
+		<main id="main-content">
+			<h1>What our customers say</h1>
+			<!-- Your store's slug. data-type is any widget: carousel, grid, badge, floating, mini-stars, sidebar, ticker, trust-seal. -->
+			<div id="pepreviewpro-reviews" data-store="magnolia-store" data-type="carousel"></div>
+		</main>
+
+		<!-- Reads your public reviews and hands them to the widget runtime. No key, no build. -->
+		<script>
+			(function () {
+				var mount = document.getElementById("pepreviewpro-reviews");
+				var api = mount.getAttribute("data-api") || "https://pepreviewpro.com";
+				fetch(api + "/api/v1/widget-data?site_id=" + encodeURIComponent(mount.getAttribute("data-store")))
+					.then(function (response) {
+						return response.json();
+					})
+					.then(function (body) {
+						var host = document.createElement("div");
+						host.className = "pepreviews-widget";
+						host.setAttribute(
+							"data-pepreviews-widget",
+							JSON.stringify({
+								type: mount.getAttribute("data-type"),
+								options: {},
+								data: { app_url: body.store.app_url, store: body.store, settings: body.settings, reviews: body.reviews, aggregate: body.aggregate }
+							})
+						);
+						mount.appendChild(host);
+					});
+			})();
+		</script>
+		<script src="https://pepreviewpro.com/embed/widgets.js" defer></script>
+
+		<!-- Optional: credit for buyers PepReviewPro sends you. Writes a first-party cookie your checkout reads. -->
+		<script type="module">
+			import { captureAttribution } from "https://esm.sh/@pepreviewpro/browser@0";
+			captureAttribution();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,61 @@
+name: CI
+
+on:
+ push:
+  branches: [main]
+ pull_request:
+
+permissions:
+ contents: read
+
+concurrency:
+ group: ci-${{ github.ref }}
+ cancel-in-progress: true
+
+jobs:
+ check:
+  runs-on: ubuntu-latest
+  steps:
+   - uses: actions/checkout@v5
+     with:
+      lfs: true
+   - uses: pnpm/action-setup@v4
+   - uses: actions/setup-node@v5
+     with:
+      node-version: 24
+      cache: pnpm
+   - run: pnpm install --frozen-lockfile
+   - name: No real data
+     run: pnpm scan:data
+   - run: pnpm lint
+   - run: pnpm typecheck
+   - run: pnpm test
+   - run: pnpm build
+   - name: Size budgets
+     run: pnpm size
+   - name: Type-check every code sample in the READMEs, agent guides, and docs
+     run: pnpm docs:snippets
+   - name: Pack every package and check what npm would get
+     run: pnpm pack:check
+   - name: Types against the app's documented API
+     run: |
+      if [ -f test/fixtures/apiEndpoints.json ]; then
+        pnpm codegen test/fixtures/apiEndpoints.json
+      else
+        echo "No apiEndpoints export synced yet. Run pnpm sync-fixtures with the app's export to turn this on."
+      fi
+   - name: Smoke test on Node 24
+     run: pnpm smoke
+   - name: Docs
+     run: pnpm docs:build
+   - name: Build the examples against the recorded API
+     run: pnpm examples:build
+   - name: Install Chromium for the Next.js example
+     run: pnpm --filter example-next-app-router exec playwright install --with-deps chromium
+   - name: Test the examples
+     run: pnpm examples:test
+   - uses: actions/setup-node@v5
+     with:
+      node-version: 20
+   - name: Smoke test on Node 20, the oldest supported
+     run: node scripts/smoke.mjs

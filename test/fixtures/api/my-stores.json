@@ -1,0 +1,516 @@
+{
+	"endpoint": "my-stores",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "every store of the owner, by name",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"stores": [
+						{
+							"slug": "example-store",
+							"name": "Example Store",
+							"description": "Research peptides, tested in the US.",
+							"website_url": "https://store.example",
+							"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+							"accent_color": "#1f6feb",
+							"rating": 3.8,
+							"review_count": 5,
+							"verified_review_count": 3,
+							"ships_from": "US",
+							"ships_to": [
+								"US"
+							],
+							"payment_methods": [],
+							"coa_url": null,
+							"catalog_synced_at": null,
+							"rating_distribution": {
+								"1": 0,
+								"2": 1,
+								"3": 1,
+								"4": 1,
+								"5": 2
+							},
+							"widget_logo_url": null,
+							"banner_url": null,
+							"public_page_enabled": true,
+							"profile_url": "https://pepreviewpro.com/vendors/example-store",
+							"widget_settings": {
+								"theme": "dark",
+								"display_mode": "carousel",
+								"autoplay_speed": 7,
+								"transition_type": "fade",
+								"show_aggregate": true,
+								"show_distribution": true,
+								"show_dates": true,
+								"show_verified_badge": true,
+								"min_rating_display": 2,
+								"ticker_speed": 12
+							}
+						},
+						{
+							"slug": "laurel-store",
+							"name": "laurel Store",
+							"description": null,
+							"website_url": "https://laurel-store.example",
+							"logo_url": null,
+							"accent_color": null,
+							"rating": 2.5,
+							"review_count": 2,
+							"verified_review_count": 1,
+							"ships_from": "US",
+							"ships_to": [
+								"US"
+							],
+							"payment_methods": [],
+							"coa_url": null,
+							"catalog_synced_at": null,
+							"rating_distribution": {
+								"1": 1,
+								"2": 0,
+								"3": 0,
+								"4": 1,
+								"5": 0
+							},
+							"widget_logo_url": null,
+							"banner_url": null,
+							"public_page_enabled": false,
+							"profile_url": null,
+							"widget_settings": null
+						}
+					],
+					"next_cursor": null
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a plugin key reaches only its own store",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PLUGIN_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"stores": [
+						{
+							"slug": "example-store",
+							"name": "Example Store",
+							"description": "Research peptides, tested in the US.",
+							"website_url": "https://store.example",
+							"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+							"accent_color": "#1f6feb",
+							"rating": 3.8,
+							"review_count": 5,
+							"verified_review_count": 3,
+							"ships_from": "US",
+							"ships_to": [
+								"US"
+							],
+							"payment_methods": [],
+							"coa_url": null,
+							"catalog_synced_at": null,
+							"rating_distribution": {
+								"1": 0,
+								"2": 1,
+								"3": 1,
+								"4": 1,
+								"5": 2
+							},
+							"widget_logo_url": null,
+							"banner_url": null,
+							"public_page_enabled": true,
+							"profile_url": "https://pepreviewpro.com/vendors/example-store",
+							"widget_settings": {
+								"theme": "dark",
+								"display_mode": "carousel",
+								"autoplay_speed": 7,
+								"transition_type": "fade",
+								"show_aggregate": true,
+								"show_distribution": true,
+								"show_dates": true,
+								"show_verified_badge": true,
+								"min_rating_display": 2,
+								"ticker_speed": 12
+							}
+						}
+					],
+					"next_cursor": null
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key without store:read",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_ME_ONLY_KEY}}"
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "insufficient_scope",
+						"message": "This API key does not have the store:read scope.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "over the rate limit",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"setup": {
+				"usage": {
+					"user": "owner",
+					"count": 20,
+					"recent": true,
+					"apiKeyId": "00000000-0000-4000-8000-000000000013"
+				}
+			},
+			"response": {
+				"status": 429,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"retry-after": "1"
+				},
+				"body": {
+					"error": {
+						"code": "rate_limited",
+						"message": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"retry-after"
+			]
+		},
+		{
+			"name": "over the monthly quota",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"setup": {
+				"usage": {
+					"user": "owner",
+					"count": 10000
+				}
+			},
+			"response": {
+				"status": 429,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "monthly_quota_exceeded",
+						"message": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "one store by slug",
+			"request": {
+				"method": "GET",
+				"query": "store=example-store",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"stores": [
+						{
+							"slug": "example-store",
+							"name": "Example Store",
+							"description": "Research peptides, tested in the US.",
+							"website_url": "https://store.example",
+							"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+							"accent_color": "#1f6feb",
+							"rating": 3.8,
+							"review_count": 5,
+							"verified_review_count": 3,
+							"ships_from": "US",
+							"ships_to": [
+								"US"
+							],
+							"payment_methods": [],
+							"coa_url": null,
+							"catalog_synced_at": null,
+							"rating_distribution": {
+								"1": 0,
+								"2": 1,
+								"3": 1,
+								"4": 1,
+								"5": 2
+							},
+							"widget_logo_url": null,
+							"banner_url": null,
+							"public_page_enabled": true,
+							"profile_url": "https://pepreviewpro.com/vendors/example-store",
+							"widget_settings": {
+								"theme": "dark",
+								"display_mode": "carousel",
+								"autoplay_speed": 7,
+								"transition_type": "fade",
+								"show_aggregate": true,
+								"show_distribution": true,
+								"show_dates": true,
+								"show_verified_badge": true,
+								"min_rating_display": 2,
+								"ticker_speed": 12
+							}
+						}
+					],
+					"next_cursor": null
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "one store a page, with a cursor to the next",
+			"request": {
+				"method": "GET",
+				"query": "limit=1",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"stores": [
+						{
+							"slug": "example-store",
+							"name": "Example Store",
+							"description": "Research peptides, tested in the US.",
+							"website_url": "https://store.example",
+							"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+							"accent_color": "#1f6feb",
+							"rating": 3.8,
+							"review_count": 5,
+							"verified_review_count": 3,
+							"ships_from": "US",
+							"ships_to": [
+								"US"
+							],
+							"payment_methods": [],
+							"coa_url": null,
+							"catalog_synced_at": null,
+							"rating_distribution": {
+								"1": 0,
+								"2": 1,
+								"3": 1,
+								"4": 1,
+								"5": 2
+							},
+							"widget_logo_url": null,
+							"banner_url": null,
+							"public_page_enabled": true,
+							"profile_url": "https://pepreviewpro.com/vendors/example-store",
+							"widget_settings": {
+								"theme": "dark",
+								"display_mode": "carousel",
+								"autoplay_speed": 7,
+								"transition_type": "fade",
+								"show_aggregate": true,
+								"show_distribution": true,
+								"show_dates": true,
+								"show_verified_badge": true,
+								"min_rating_display": 2,
+								"ticker_speed": 12
+							}
+						}
+					],
+					"next_cursor": "eyJvIjoxfQ"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "the next page from the cursor",
+			"request": {
+				"method": "GET",
+				"query": "limit=1&cursor=eyJvIjoxfQ",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"stores": [
+						{
+							"slug": "laurel-store",
+							"name": "laurel Store",
+							"description": null,
+							"website_url": "https://laurel-store.example",
+							"logo_url": null,
+							"accent_color": null,
+							"rating": 2.5,
+							"review_count": 2,
+							"verified_review_count": 1,
+							"ships_from": "US",
+							"ships_to": [
+								"US"
+							],
+							"payment_methods": [],
+							"coa_url": null,
+							"catalog_synced_at": null,
+							"rating_distribution": {
+								"1": 1,
+								"2": 0,
+								"3": 0,
+								"4": 1,
+								"5": 0
+							},
+							"widget_logo_url": null,
+							"banner_url": null,
+							"public_page_enabled": false,
+							"profile_url": null,
+							"widget_settings": null
+						}
+					],
+					"next_cursor": null
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store the key does not reach",
+			"request": {
+				"method": "GET",
+				"query": "store=olive-store",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 404,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "store_not_found",
+						"message": "This key does not reach that store.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store uuid",
+			"request": {
+				"method": "GET",
+				"query": "store=00000000-0000-4000-8000-000000000001",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "uuid_not_accepted",
+						"message": "store takes the store's slug, like example-store, not a UUID.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

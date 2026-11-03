@@ -1,0 +1,25 @@
+{
+	"name": "example-next-app-router",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start -p 3100",
+		"test": "playwright test"
+	},
+	"dependencies": {
+		"@pepreviewpro/next": "workspace:*",
+		"@pepreviewpro/react": "workspace:*",
+		"@pepreviewpro/server": "workspace:*",
+		"next": "16.4.2",
+		"react": "19.3.1",
+		"react-dom": "19.3.1"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.64.1",
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"typescript": "6.0.3"
+	}
+}

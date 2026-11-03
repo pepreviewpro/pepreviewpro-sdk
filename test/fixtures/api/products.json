@@ -1,0 +1,1073 @@
+{
+	"endpoint": "products",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "products for a compound, best first",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&sort=best&limit=50",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5003",
+							"name": "BPC-157 5mg",
+							"page_url": "https://store.example/product/bpc-157-5mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDMiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.tgbLQRGAHdYMIqkNnUYMdNkqmb6KR81hcB6CaBNvzaQ",
+							"image_url": null,
+							"price_min": 49,
+							"price_max": 49,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "88",
+							"name": "BPC-157 10mg",
+							"page_url": "https://store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.VurEhm08_I_E_4gsUjwTOCgdqlUS4yLZsFBzI4Uk7iw",
+							"image_url": null,
+							"price_min": 89,
+							"price_max": 89,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 2,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5002",
+							"name": "BPC-157 + TB-500 Blend 10mg",
+							"page_url": "https://store.example/product/bpc-157-tb-500-blend-10mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDIiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.6Zxebt52j-bldKcokgPhRQ0qX4wCEQ-GTFg7Zwuovdc",
+							"image_url": null,
+							"price_min": 129,
+							"price_max": 129,
+							"currency": "USD",
+							"in_stock": false,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5004",
+							"name": "BPC-157 20mg",
+							"page_url": "https://store.example/product/bpc-157-20mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDQiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.cDUSzSIg-Wwff3nt-q8MK6UWq8-Pb5lkGOdBUWqbIck",
+							"image_url": null,
+							"price_min": 159,
+							"price_max": 159,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5101",
+							"name": "BPC-157 10mg",
+							"page_url": "https://olive-store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDIiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAyMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.az1orKr2h5ad6NiQg4zAxdaGOEeg_TkUqeK1g7G9vJQ",
+							"image_url": null,
+							"price_min": 79,
+							"price_max": 79,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "olive-store",
+								"name": "Olive Store",
+								"website_url": "https://olive-store.example"
+							}
+						}
+					],
+					"total": 5,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "products for a compound, cheapest first",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&sort=price",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5003",
+							"name": "BPC-157 5mg",
+							"page_url": "https://store.example/product/bpc-157-5mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDMiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.tgbLQRGAHdYMIqkNnUYMdNkqmb6KR81hcB6CaBNvzaQ",
+							"image_url": null,
+							"price_min": 49,
+							"price_max": 49,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5101",
+							"name": "BPC-157 10mg",
+							"page_url": "https://olive-store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDIiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAyMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.az1orKr2h5ad6NiQg4zAxdaGOEeg_TkUqeK1g7G9vJQ",
+							"image_url": null,
+							"price_min": 79,
+							"price_max": 79,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "olive-store",
+								"name": "Olive Store",
+								"website_url": "https://olive-store.example"
+							}
+						},
+						{
+							"ref": "88",
+							"name": "BPC-157 10mg",
+							"page_url": "https://store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.VurEhm08_I_E_4gsUjwTOCgdqlUS4yLZsFBzI4Uk7iw",
+							"image_url": null,
+							"price_min": 89,
+							"price_max": 89,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 2,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5002",
+							"name": "BPC-157 + TB-500 Blend 10mg",
+							"page_url": "https://store.example/product/bpc-157-tb-500-blend-10mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDIiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.6Zxebt52j-bldKcokgPhRQ0qX4wCEQ-GTFg7Zwuovdc",
+							"image_url": null,
+							"price_min": 129,
+							"price_max": 129,
+							"currency": "USD",
+							"in_stock": false,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5004",
+							"name": "BPC-157 20mg",
+							"page_url": "https://store.example/product/bpc-157-20mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDQiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.cDUSzSIg-Wwff3nt-q8MK6UWq8-Pb5lkGOdBUWqbIck",
+							"image_url": null,
+							"price_min": 159,
+							"price_max": 159,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						}
+					],
+					"total": 5,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "products by their store's score",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&sort=rating",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5101",
+							"name": "BPC-157 10mg",
+							"page_url": "https://olive-store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDIiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAyMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.az1orKr2h5ad6NiQg4zAxdaGOEeg_TkUqeK1g7G9vJQ",
+							"image_url": null,
+							"price_min": 79,
+							"price_max": 79,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "olive-store",
+								"name": "Olive Store",
+								"website_url": "https://olive-store.example"
+							}
+						},
+						{
+							"ref": "5003",
+							"name": "BPC-157 5mg",
+							"page_url": "https://store.example/product/bpc-157-5mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDMiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.tgbLQRGAHdYMIqkNnUYMdNkqmb6KR81hcB6CaBNvzaQ",
+							"image_url": null,
+							"price_min": 49,
+							"price_max": 49,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "88",
+							"name": "BPC-157 10mg",
+							"page_url": "https://store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.VurEhm08_I_E_4gsUjwTOCgdqlUS4yLZsFBzI4Uk7iw",
+							"image_url": null,
+							"price_min": 89,
+							"price_max": 89,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 2,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5002",
+							"name": "BPC-157 + TB-500 Blend 10mg",
+							"page_url": "https://store.example/product/bpc-157-tb-500-blend-10mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDIiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.6Zxebt52j-bldKcokgPhRQ0qX4wCEQ-GTFg7Zwuovdc",
+							"image_url": null,
+							"price_min": 129,
+							"price_max": 129,
+							"currency": "USD",
+							"in_stock": false,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5004",
+							"name": "BPC-157 20mg",
+							"page_url": "https://store.example/product/bpc-157-20mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDQiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.cDUSzSIg-Wwff3nt-q8MK6UWq8-Pb5lkGOdBUWqbIck",
+							"image_url": null,
+							"price_min": 159,
+							"price_max": 159,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						}
+					],
+					"total": 5,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "only products in stock",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&in_stock=true",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5003",
+							"name": "BPC-157 5mg",
+							"page_url": "https://store.example/product/bpc-157-5mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDMiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.tgbLQRGAHdYMIqkNnUYMdNkqmb6KR81hcB6CaBNvzaQ",
+							"image_url": null,
+							"price_min": 49,
+							"price_max": 49,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "88",
+							"name": "BPC-157 10mg",
+							"page_url": "https://store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.VurEhm08_I_E_4gsUjwTOCgdqlUS4yLZsFBzI4Uk7iw",
+							"image_url": null,
+							"price_min": 89,
+							"price_max": 89,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 2,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5004",
+							"name": "BPC-157 20mg",
+							"page_url": "https://store.example/product/bpc-157-20mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDQiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.cDUSzSIg-Wwff3nt-q8MK6UWq8-Pb5lkGOdBUWqbIck",
+							"image_url": null,
+							"price_min": 159,
+							"price_max": 159,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5101",
+							"name": "BPC-157 10mg",
+							"page_url": "https://olive-store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDIiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAyMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.az1orKr2h5ad6NiQg4zAxdaGOEeg_TkUqeK1g7G9vJQ",
+							"image_url": null,
+							"price_min": 79,
+							"price_max": 79,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "olive-store",
+								"name": "Olive Store",
+								"website_url": "https://olive-store.example"
+							}
+						}
+					],
+					"total": 4,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": true,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "only one store's products",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&store=olive-store",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5101",
+							"name": "BPC-157 10mg",
+							"page_url": "https://olive-store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDIiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAyMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.az1orKr2h5ad6NiQg4zAxdaGOEeg_TkUqeK1g7G9vJQ",
+							"image_url": null,
+							"price_min": 79,
+							"price_max": 79,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "olive-store",
+								"name": "Olive Store",
+								"website_url": "https://olive-store.example"
+							}
+						}
+					],
+					"total": 1,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "several stores, filtered before paging",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&store=example-store%2C%20olive-store&sort=price&limit=2&cursor=eyJvIjoxfQ",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5101",
+							"name": "BPC-157 10mg",
+							"page_url": "https://olive-store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDIiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAyMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.az1orKr2h5ad6NiQg4zAxdaGOEeg_TkUqeK1g7G9vJQ",
+							"image_url": null,
+							"price_min": 79,
+							"price_max": 79,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "olive-store",
+								"name": "Olive Store",
+								"website_url": "https://olive-store.example"
+							}
+						},
+						{
+							"ref": "88",
+							"name": "BPC-157 10mg",
+							"page_url": "https://store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.VurEhm08_I_E_4gsUjwTOCgdqlUS4yLZsFBzI4Uk7iw",
+							"image_url": null,
+							"price_min": 89,
+							"price_max": 89,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 2,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						}
+					],
+					"total": 5,
+					"next_cursor": "eyJvIjozfQ",
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store that partners cannot show matches nothing",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&store=pine-store",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [],
+					"total": 0,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store uuid",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&store=example-store%2C00000000-0000-4000-8000-000000000001",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "uuid_not_accepted",
+						"message": "store takes the store's slug, like example-store, not a UUID.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a compound outside the library matches nothing",
+			"request": {
+				"method": "GET",
+				"query": "compound=unknown",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [],
+					"total": 0,
+					"next_cursor": null,
+					"filters": {
+						"compound": null,
+						"unknown_compound": true,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key no partner is linked to gets no click_url",
+			"request": {
+				"method": "GET",
+				"query": "compound=tb-500",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5005",
+							"name": "TB-500 5mg",
+							"page_url": "https://store.example/product/tb-500-5mg",
+							"image_url": null,
+							"price_min": 59,
+							"price_max": 59,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5002",
+							"name": "BPC-157 + TB-500 Blend 10mg",
+							"page_url": "https://store.example/product/bpc-157-tb-500-blend-10mg",
+							"image_url": null,
+							"price_min": 129,
+							"price_max": 129,
+							"currency": "USD",
+							"in_stock": false,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						}
+					],
+					"total": 2,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "tb-500",
+							"name": "TB-500"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a limit up to 100 is allowed",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&limit=80",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"products": [
+						{
+							"ref": "5003",
+							"name": "BPC-157 5mg",
+							"page_url": "https://store.example/product/bpc-157-5mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDMiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.tgbLQRGAHdYMIqkNnUYMdNkqmb6KR81hcB6CaBNvzaQ",
+							"image_url": null,
+							"price_min": 49,
+							"price_max": 49,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "88",
+							"name": "BPC-157 10mg",
+							"page_url": "https://store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.VurEhm08_I_E_4gsUjwTOCgdqlUS4yLZsFBzI4Uk7iw",
+							"image_url": null,
+							"price_min": 89,
+							"price_max": 89,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 2,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5002",
+							"name": "BPC-157 + TB-500 Blend 10mg",
+							"page_url": "https://store.example/product/bpc-157-tb-500-blend-10mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDIiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.6Zxebt52j-bldKcokgPhRQ0qX4wCEQ-GTFg7Zwuovdc",
+							"image_url": null,
+							"price_min": 129,
+							"price_max": 129,
+							"currency": "USD",
+							"in_stock": false,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5004",
+							"name": "BPC-157 20mg",
+							"page_url": "https://store.example/product/bpc-157-20mg",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDEiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAxMDQiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.cDUSzSIg-Wwff3nt-q8MK6UWq8-Pb5lkGOdBUWqbIck",
+							"image_url": null,
+							"price_min": 159,
+							"price_max": 159,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						},
+						{
+							"ref": "5101",
+							"name": "BPC-157 10mg",
+							"page_url": "https://olive-store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMDIiLCJwcm9kdWN0SWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAyMDEiLCJzb3VyY2UiOiJwYXJ0bmVyIiwicGxhY2VtZW50IjoiZmluZGVyUHJvZHVjdCJ9.az1orKr2h5ad6NiQg4zAxdaGOEeg_TkUqeK1g7G9vJQ",
+							"image_url": null,
+							"price_min": 79,
+							"price_max": 79,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 0,
+							"store": {
+								"slug": "olive-store",
+								"name": "Olive Store",
+								"website_url": "https://olive-store.example"
+							}
+						}
+					],
+					"total": 5,
+					"next_cursor": null,
+					"filters": {
+						"compound": {
+							"slug": "bpc-157",
+							"name": "BPC-157"
+						},
+						"unknown_compound": false,
+						"ships_to": null,
+						"payment": null,
+						"in_stock": false,
+						"min_rating": null
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "no compound",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "missing_compound",
+						"message": "compound is required.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an unknown sort",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&sort=cheapest",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_sort",
+						"message": "sort must be best, price, or rating.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a limit with no number",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&limit=all",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_limit",
+						"message": "limit must be a whole number from 1 to 100.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store owner's key has no directory scope",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "insufficient_scope",
+						"message": "This API key does not have the stores:read scope.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a limit over 100 is refused",
+			"request": {
+				"method": "GET",
+				"query": "compound=bpc-157&limit=101",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_limit",
+						"message": "limit must be a whole number from 1 to 100.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

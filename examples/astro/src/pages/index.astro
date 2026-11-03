@@ -1,0 +1,26 @@
+---
+import { Carousel, ReviewList, ReviewsJsonLd } from "@pepreviewpro/react";
+import { PepReviewPro } from "@pepreviewpro/server";
+
+// Runs at build time, so the page ships with its reviews. Rebuild, or use server output, to pick up new ones.
+const reviews = await new PepReviewPro({ store: "magnolia-store", heartbeat: false }).reviews.list({ productRef: "sku-101", limit: 20 });
+const minRating = reviews.settings?.min_rating_display ?? 1;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>BPC-157 10mg reviews</title>
+		<ReviewsJsonLd data={reviews} product={{ name: "BPC-157 10mg", url: "https://store.example/products/sku-101" }} />
+	</head>
+	<body>
+		<a href="#main-content">Skip to content</a>
+		<main id="main-content">
+			<h1>BPC-157 10mg</h1>
+			<Carousel client:visible data={reviews} />
+			<h2>All reviews</h2>
+			<ReviewList reviews={reviews.reviews.filter((review) => review.rating >= minRating)} />
+		</main>
+	</body>
+</html>

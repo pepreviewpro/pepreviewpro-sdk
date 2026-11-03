@@ -1,0 +1,63 @@
+{
+	"name": "@pepreviewpro/server",
+	"version": "0.1.0",
+	"description": "Server-side PepReviewPro for any stack: orders, imports, catalog, reviews for SSR, JSON-LD, webhooks.",
+	"license": "SEE LICENSE IN LICENSE",
+	"author": "PepReviewPro <support@pepreviewpro.com>",
+	"homepage": "https://pepreviewpro.com/help/send-orders-from-your-checkout",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pepreviewpro/pepreviewpro-sdk.git",
+		"directory": "packages/server"
+	},
+	"bugs": {
+		"email": "support@pepreviewpro.com"
+	},
+	"type": "module",
+	"sideEffects": [
+		"./dist/index.js",
+		"./dist/browserGuard.js"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"react-server": "./dist/index.js",
+			"edge-light": "./dist/index.js",
+			"workerd": "./dist/index.js",
+			"worker": "./dist/index.js",
+			"deno": "./dist/index.js",
+			"bun": "./dist/index.js",
+			"node": "./dist/index.js",
+			"browser": "./dist/browserGuard.js",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"AGENTS.md",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown"
+	},
+	"dependencies": {
+		"@pepreviewpro/browser": "workspace:*",
+		"@pepreviewpro/core": "workspace:*"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"pepreviewpro",
+		"reviews",
+		"json-ld",
+		"webhooks"
+	]
+}

@@ -1,0 +1,188 @@
+{
+	"endpoint": "heartbeat",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "records the install, dropping capabilities it does not know",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store",
+					"sdk_version": "0.1.0",
+					"packages": {
+						"@pepreviewpro/server": "0.1.0",
+						"@pepreviewpro/next": "0.1.0"
+					},
+					"framework": "next@16.4.2",
+					"runtime": "node@22.11.0",
+					"capabilities": [
+						"orders",
+						"attribution",
+						"teleport"
+					]
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"store": "example-store",
+					"received_at": "2026-11-03T20:56:30.363Z"
+				},
+				"volatile": [
+					"received_at"
+				]
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "packages that are not a name-to-version map",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store",
+					"packages": [
+						"@pepreviewpro/server"
+					]
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_body",
+						"message": "The request body is not valid JSON or does not match this endpoint.",
+						"request_id": "contract-request-id",
+						"details": {
+							"formErrors": [],
+							"fieldErrors": {
+								"packages": [
+									"Invalid input: expected record, received array"
+								]
+							}
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store the key is not pinned to",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "laurel-store"
+				}
+			},
+			"response": {
+				"status": 404,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "store_not_found",
+						"message": "This key does not reach that store.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a missing key",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store"
+				}
+			},
+			"response": {
+				"status": 401,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "missing_api_key",
+						"message": "Send an API key in the Authorization header.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key without store:write",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store"
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "insufficient_scope",
+						"message": "This API key does not have the store:write scope.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

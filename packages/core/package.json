@@ -1,0 +1,46 @@
+{
+	"name": "@pepreviewpro/core",
+	"version": "0.1.0",
+	"description": "Typed HTTP client for the PepReviewPro API.",
+	"license": "SEE LICENSE IN LICENSE",
+	"author": "PepReviewPro <support@pepreviewpro.com>",
+	"homepage": "https://pepreviewpro.com/help/connect-a-store-without-wordpress",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pepreviewpro/pepreviewpro-sdk.git",
+		"directory": "packages/core"
+	},
+	"bugs": {
+		"email": "support@pepreviewpro.com"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"AGENTS.md",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"pepreviewpro",
+		"reviews"
+	]
+}

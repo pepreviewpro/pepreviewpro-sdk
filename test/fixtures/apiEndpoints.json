@@ -1,0 +1,2688 @@
+[
+	{
+		"handler": "me",
+		"title": "Your key",
+		"method": "GET",
+		"path": "/api/v1/me",
+		"audience": "owner",
+		"auth": "apiKey",
+		"scope": "me:read",
+		"rateLimited": false,
+		"summary": "The key you called with and how much of this month's quota is left.",
+		"params": [],
+		"response": {
+			"key": {
+				"id": "00000000-0000-4000-8000-000000000017",
+				"key_prefix": "pk_live_Ex03",
+				"key_type": "public",
+				"scopes": [
+					"me:read",
+					"store:read"
+				]
+			},
+			"limits": {
+				"rate_per_second": 20,
+				"monthly_quota": 10000,
+				"used_this_month": 412,
+				"remaining_this_month": 9588
+			}
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the me:read scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold me:read."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes GET only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"`rate_per_second` is this key's own limit. The month figures are the account's, across its `pk_live_` keys.",
+			"On a store key, `monthly_quota` and `remaining_this_month` are null: store keys have no monthly quota."
+		]
+	},
+	{
+		"handler": "myStores",
+		"title": "Your stores",
+		"method": "GET",
+		"path": "/api/v1/my-stores",
+		"audience": "owner",
+		"auth": "apiKey",
+		"scope": "store:read",
+		"rateLimited": true,
+		"summary": "Every store the key reaches, by name, with its branding, widget settings, review totals, and shipping. A store key reaches only its own store.",
+		"params": [
+			{
+				"name": "store",
+				"in": "query",
+				"type": "string",
+				"description": "A store's slug, for that store alone."
+			},
+			{
+				"name": "limit",
+				"in": "query",
+				"type": "integer",
+				"default": "20",
+				"description": "Results per page, 1 to 100."
+			},
+			{
+				"name": "cursor",
+				"in": "query",
+				"type": "string",
+				"description": "`next_cursor` from the previous page. Send the same other parameters with it."
+			}
+		],
+		"response": {
+			"stores": [
+				{
+					"slug": "example-store",
+					"name": "Example Store",
+					"description": "Research peptides, tested in the US.",
+					"website_url": "https://store.example",
+					"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+					"accent_color": "#1f6feb",
+					"rating": 4.78,
+					"review_count": 128,
+					"verified_review_count": 117,
+					"ships_from": "US",
+					"ships_to": [
+						"CA",
+						"GB",
+						"US"
+					],
+					"payment_methods": [
+						"card",
+						"crypto"
+					],
+					"coa_url": "https://store.example/lab-results",
+					"catalog_synced_at": "2026-10-30T03:31:12.000Z",
+					"rating_distribution": {
+						"1": 0,
+						"2": 1,
+						"3": 2,
+						"4": 21,
+						"5": 104
+					},
+					"widget_logo_url": null,
+					"banner_url": null,
+					"public_page_enabled": true,
+					"profile_url": "https://pepreviewpro.com/vendors/example-store",
+					"widget_settings": {
+						"theme": "light",
+						"display_mode": "single",
+						"autoplay_speed": 5,
+						"transition_type": "slide",
+						"show_aggregate": true,
+						"show_distribution": true,
+						"show_dates": true,
+						"show_verified_badge": true,
+						"min_rating_display": 1,
+						"ticker_speed": 8
+					}
+				}
+			],
+			"next_cursor": null
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the store:read scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold store:read."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "limit must be a whole number from 1 to 100.",
+				"code": "invalid_limit",
+				"when": "`limit` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "cursor is not one this endpoint sent. Start again without it.",
+				"code": "invalid_cursor",
+				"when": "`cursor` is not a `next_cursor` this endpoint sent."
+			},
+			{
+				"status": 400,
+				"error": "store takes the store's slug, like example-store, not a UUID.",
+				"code": "uuid_not_accepted",
+				"when": "`store` is a UUID. Stores are addressed by slug."
+			},
+			{
+				"status": 404,
+				"error": "This key does not reach that store.",
+				"code": "store_not_found",
+				"when": "`store` is not one of the key's live stores."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes GET only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"`slug` is what every other endpoint takes as `store`.",
+			"`profile_url` is null while the store's public page is off. `widget_settings` is null until the store saves them.",
+			"`ships_to` is empty when the store has not listed its countries."
+		]
+	},
+	{
+		"handler": "myReviews",
+		"title": "Your reviews",
+		"method": "GET",
+		"path": "/api/v1/my-reviews",
+		"audience": "owner",
+		"auth": "apiKey",
+		"scope": "store:reviews",
+		"rateLimited": true,
+		"summary": "One store's approved reviews, with its rating aggregate.",
+		"params": [
+			{
+				"name": "store",
+				"in": "query",
+				"type": "string",
+				"description": "The store's slug. Required when the key reaches more than one store."
+			},
+			{
+				"name": "product_ref",
+				"in": "query",
+				"type": "string",
+				"description": "Your own id for the product, the one you send in orders and the catalog. Narrows the reviews and the aggregate."
+			},
+			{
+				"name": "updated_since",
+				"in": "query",
+				"type": "string",
+				"description": "An ISO 8601 time. Only reviews changed since then, oldest change first, for keeping your own copy current."
+			},
+			{
+				"name": "sort",
+				"in": "query",
+				"type": "newest | oldest | highest | lowest",
+				"default": "newest",
+				"description": "Review order. Ignored with `updated_since`."
+			},
+			{
+				"name": "min_rating",
+				"in": "query",
+				"type": "number",
+				"description": "Only reviews rated at least this. Does not change the aggregate."
+			},
+			{
+				"name": "verified_only",
+				"in": "query",
+				"type": "boolean",
+				"default": "false",
+				"description": "Only purchase-verified reviews. Does not change the aggregate."
+			},
+			{
+				"name": "limit",
+				"in": "query",
+				"type": "integer",
+				"default": "20",
+				"description": "Results per page, 1 to 100."
+			},
+			{
+				"name": "cursor",
+				"in": "query",
+				"type": "string",
+				"description": "`next_cursor` from the previous page. Send the same other parameters with it."
+			}
+		],
+		"response": {
+			"reviews": [
+				{
+					"id": "00000000-0000-4000-8000-000000000003",
+					"store": "example-store",
+					"product_ref": "sku-102",
+					"order_ref": "ORD-1001",
+					"rating": 5,
+					"title": "Fast and careful",
+					"body": "Arrived in two days, packed cold, and matched the certificate of analysis.",
+					"author": "Riley K.",
+					"verified": true,
+					"created_at": "2026-10-03T14:21:07.512Z",
+					"updated_at": "2026-10-04T09:12:44.001Z"
+				}
+			],
+			"aggregate": {
+				"rating": 4.78,
+				"review_count": 128,
+				"verified_review_count": 117,
+				"distribution": {
+					"1": 0,
+					"2": 1,
+					"3": 2,
+					"4": 21,
+					"5": 104
+				}
+			},
+			"next_cursor": "eyJvIjoyMH0"
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the store:reviews scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold store:reviews."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "sort must be newest, oldest, highest, or lowest.",
+				"code": "invalid_sort",
+				"when": "`sort` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "limit must be a whole number from 1 to 100.",
+				"code": "invalid_limit",
+				"when": "`limit` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "cursor is not one this endpoint sent. Start again without it.",
+				"code": "invalid_cursor",
+				"when": "`cursor` is not a `next_cursor` this endpoint sent."
+			},
+			{
+				"status": 400,
+				"error": "min_rating must be a number from 0 to 5.",
+				"code": "invalid_min_rating",
+				"when": "`min_rating` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "updated_since must be an ISO 8601 time.",
+				"code": "invalid_updated_since",
+				"when": "`updated_since` is not a time."
+			},
+			{
+				"status": 400,
+				"error": "store takes the store's slug, like example-store, not a UUID.",
+				"code": "uuid_not_accepted",
+				"when": "`store` is a UUID. Stores are addressed by slug."
+			},
+			{
+				"status": 400,
+				"error": "store is required because this key reaches more than one store. /api/v1/my-stores lists them.",
+				"code": "store_required",
+				"when": "No `store` and the key reaches several stores."
+			},
+			{
+				"status": 404,
+				"error": "This key does not reach that store.",
+				"code": "store_not_found",
+				"when": "`store` is not one of the key's live stores, or the key reaches none."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes GET only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"With `updated_since`, or a cursor from such a listing, reviews come in the order they last changed. Save the time you start a sweep and pass it as `updated_since` on the next one.",
+			"`product_ref` and `order_ref` are your own ids for the product and order, as strings. They are null when the review names none. A `product_ref` we have never seen matches no reviews.",
+			"`author` is the reviewer's first name and last initial. `verified` is true when the review is matched to an order."
+		]
+	},
+	{
+		"handler": "myOrders",
+		"title": "Send orders (deprecated)",
+		"method": "POST",
+		"path": "/api/v1/my-orders",
+		"legacyPath": "/functions/v1/api-v1-my-orders",
+		"deprecated": true,
+		"audience": "owner",
+		"auth": "apiKey",
+		"scope": "store:orders",
+		"rateLimited": true,
+		"summary": "Records completed orders and queues review requests. Use POST /api/v1/orders instead. This endpoint keeps its old shape until the stores that use it have moved.",
+		"params": [
+			{
+				"name": "store_id",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The store's slug."
+			},
+			{
+				"name": "order",
+				"in": "body",
+				"type": "Order",
+				"description": "One order. Send this or `orders`."
+			},
+			{
+				"name": "orders",
+				"in": "body",
+				"type": "Order[]",
+				"description": "Up to 50 orders. Processing stops at the first one that fails."
+			},
+			{
+				"name": "Order.id",
+				"in": "body",
+				"type": "integer",
+				"required": true,
+				"description": "The WooCommerce order number."
+			},
+			{
+				"name": "Order.email",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The buyer's email, up to 255 characters."
+			},
+			{
+				"name": "Order.name",
+				"in": "body",
+				"type": "string",
+				"description": "The buyer's full name, up to 200 characters."
+			},
+			{
+				"name": "Order.products",
+				"in": "body",
+				"type": "{ id, name }[]",
+				"description": "Up to 100 products. The first one names the review request."
+			}
+		],
+		"response": {
+			"success": true,
+			"store_id": "example-store",
+			"results": [
+				{
+					"order_id": 1001,
+					"queued": 1,
+					"duplicates": 0
+				},
+				{
+					"order_id": 1002,
+					"queued": 0,
+					"duplicates": 0,
+					"skipped_reason": "no_active_campaign"
+				}
+			]
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Missing API key",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "Invalid API key",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "API key revoked",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "API key expired",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "Insufficient scope — key needs store:orders",
+				"code": "insufficient_scope",
+				"when": "The key does not hold store:orders."
+			},
+			{
+				"status": 429,
+				"error": "Rate limit exceeded",
+				"code": "rate_limited",
+				"when": "Too many requests in one second from this key. `reason` is `rate_limit`."
+			},
+			{
+				"status": 429,
+				"error": "Monthly quota exceeded",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's monthly quota is used up. `reason` is `monthly_quota`."
+			},
+			{
+				"status": 400,
+				"error": "Invalid request body.",
+				"code": "invalid_body",
+				"when": "The body is not valid JSON or fails validation. `details` lists the problems per field."
+			},
+			{
+				"status": 400,
+				"error": "store_id must be a store slug (e.g. `example-store`), not an internal UUID.",
+				"code": "uuid_not_accepted",
+				"when": "`store_id` is a UUID."
+			},
+			{
+				"status": 404,
+				"error": "Store not found for this API key.",
+				"code": "store_not_found",
+				"when": "`store_id` is not one of the key's stores."
+			},
+			{
+				"status": 500,
+				"error": "Failed to queue emails",
+				"code": "queue_failed",
+				"when": "An order could not be saved or queued. `results` shows how far it got."
+			},
+			{
+				"status": 405,
+				"error": "Method not allowed",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Internal server error",
+				"code": "internal_error",
+				"when": "Something failed on our side. Retry with backoff."
+			}
+		],
+		"notes": [
+			"Failures here answer `{ success: false, error, code }`, the shape this endpoint had before November 3, 2026.",
+			"Sending an order twice is safe. Repeats count as `duplicates` and are not mailed again."
+		]
+	},
+	{
+		"handler": "orders",
+		"title": "Send orders",
+		"method": "POST",
+		"path": "/api/v1/orders",
+		"audience": "owner",
+		"auth": "apiKey",
+		"scope": "store:orders",
+		"rateLimited": true,
+		"summary": "Records orders from any storefront, with their status, totals, and where the buyer came from, and queues review requests when an order reaches the status your store asks for. Sending an order again updates it.",
+		"params": [
+			{
+				"name": "Idempotency-Key",
+				"in": "header",
+				"type": "string",
+				"description": "1 to 200 characters. A repeat with the same key and body within 24 hours gets the first answer and changes nothing."
+			},
+			{
+				"name": "store",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The store's slug."
+			},
+			{
+				"name": "import",
+				"in": "body",
+				"type": "boolean",
+				"default": "false",
+				"description": "True for past orders. They are saved and credited, and no email is queued."
+			},
+			{
+				"name": "orders",
+				"in": "body",
+				"type": "Order[]",
+				"required": true,
+				"description": "1 to 200 orders."
+			},
+			{
+				"name": "Order.id",
+				"in": "body",
+				"type": "string | integer",
+				"required": true,
+				"description": "Your order id. It comes back as a string."
+			},
+			{
+				"name": "Order.status",
+				"in": "body",
+				"type": "pending | paid | completed | refunded | cancelled",
+				"required": true,
+				"description": "Review requests are queued on `completed`, or also on `paid` when the store asks for it. `refunded` and `cancelled` skip any still queued."
+			},
+			{
+				"name": "Order.email",
+				"in": "body",
+				"type": "string",
+				"description": "The buyer's email, up to 255 characters. No email, no review request."
+			},
+			{
+				"name": "Order.name",
+				"in": "body",
+				"type": "string",
+				"description": "The buyer's full name."
+			},
+			{
+				"name": "Order.customer_id",
+				"in": "body",
+				"type": "string | integer",
+				"description": "Your customer id. Only whole numbers are kept."
+			},
+			{
+				"name": "Order.total, Order.currency",
+				"in": "body",
+				"type": "number, string",
+				"description": "The order total in major units, and its currency code."
+			},
+			{
+				"name": "Order.line_items",
+				"in": "body",
+				"type": "{ product_id, variation_id, name, quantity, total }[]",
+				"description": "Up to 500 items. `product_id` is your own product id, as in the catalog. The first item names the review request."
+			},
+			{
+				"name": "Order.created_at, Order.paid_at, Order.completed_at",
+				"in": "body",
+				"type": "string",
+				"description": "ISO 8601 times."
+			},
+			{
+				"name": "Order.attribution",
+				"in": "body",
+				"type": "{ landing_url, referrer, utm_source, utm_medium, utm_campaign, utm_content, utm_term, first_seen_at }",
+				"description": "Where the buyer's visit began. A `prp_click_id` in `landing_url` credits the order to the PepReviewPro click that sent them."
+			},
+			{
+				"name": "Order.customer_ip, Order.customer_user_agent",
+				"in": "body",
+				"type": "string",
+				"description": "The buyer's at checkout. We match them to a profile view, then keep only a hash."
+			},
+			{
+				"name": "Order.reviews_seen_at",
+				"in": "body",
+				"type": "integer",
+				"description": "Unix seconds when your reviews widget last showed the buyer your reviews."
+			}
+		],
+		"response": {
+			"store": "example-store",
+			"results": [
+				{
+					"id": "ORD-1001",
+					"status": "created",
+					"queued": 1,
+					"duplicates": 0
+				},
+				{
+					"id": "1002",
+					"status": "unchanged",
+					"queued": 0,
+					"duplicates": 1
+				}
+			]
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the store:orders scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold store:orders."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "The request body is not valid JSON or does not match this endpoint.",
+				"code": "invalid_body",
+				"when": "The body is not valid JSON or fails validation. `error.details` lists the problems per field."
+			},
+			{
+				"status": 400,
+				"error": "store takes the store's slug, like example-store, not a UUID.",
+				"code": "uuid_not_accepted",
+				"when": "`store` is a UUID. Stores are addressed by slug."
+			},
+			{
+				"status": 404,
+				"error": "This key does not reach that store.",
+				"code": "store_not_found",
+				"when": "`store` is not one of the key's live stores."
+			},
+			{
+				"status": 400,
+				"error": "Idempotency-Key must be 1 to 200 characters.",
+				"code": "invalid_idempotency_key",
+				"when": "The `Idempotency-Key` header is empty or longer."
+			},
+			{
+				"status": 409,
+				"error": "A request with this Idempotency-Key is still running. Retry in a moment.",
+				"code": "idempotency_key_in_progress",
+				"when": "The first request with this key has not finished. Retry it."
+			},
+			{
+				"status": 422,
+				"error": "This Idempotency-Key was sent with a different body. Use a new key for a new request.",
+				"code": "idempotency_key_reused",
+				"when": "The key was used in the last 24 hours with another body."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes POST only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"`status` in each result is `created`, `updated`, or `unchanged`, so a re-send of recent orders is safe and shows what it changed.",
+			"A field you leave out keeps what we have, so `{ id, status }` alone updates the status. A review request it queues uses the email and items sent earlier.",
+			"Attribution, `customer_ip`, `customer_user_agent`, and `reviews_seen_at` are what an order's credit is worked out from. Send any of them and the credit is worked out again from what you sent; send none and the stored credit stays.",
+			"`skipped_reason` says why nothing was queued: `import`, `not_trigger_status`, `nothing_to_email` (no email or no items), or `no_active_campaign`.",
+			"A 500 may leave some orders saved. Retry the same call: saved orders come back `unchanged` and are never mailed twice.",
+			"Send a new `Idempotency-Key` for each call and the same one when you retry it, and a retry after a timeout or a 5xx is never applied twice. Keys are per store, the body is compared with its keys sorted, and a failed call stores nothing, so its retry runs again."
+		]
+	},
+	{
+		"handler": "catalog",
+		"title": "Send your catalog",
+		"method": "PUT",
+		"path": "/api/v1/catalog",
+		"audience": "owner",
+		"auth": "apiKey",
+		"scope": "store:catalog",
+		"rateLimited": true,
+		"summary": "Replaces your store's product list on PepReviewPro, with where you ship and how buyers pay. Products you leave out are hidden, never deleted, since reviews point at them.",
+		"params": [
+			{
+				"name": "Idempotency-Key",
+				"in": "header",
+				"type": "string",
+				"description": "1 to 200 characters. A repeat with the same key and body within 24 hours gets the first answer and changes nothing."
+			},
+			{
+				"name": "store",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The store's slug."
+			},
+			{
+				"name": "products",
+				"in": "body",
+				"type": "Product[]",
+				"required": true,
+				"description": "Your whole published catalog, up to 5,000 products. A product that does not parse is skipped."
+			},
+			{
+				"name": "Product.id",
+				"in": "body",
+				"type": "string | integer",
+				"required": true,
+				"description": "Your product id, the same one your orders send."
+			},
+			{
+				"name": "Product.name",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The product's name."
+			},
+			{
+				"name": "Product.short_description, Product.url, Product.image_url",
+				"in": "body",
+				"type": "string",
+				"description": "HTML is stripped from the description."
+			},
+			{
+				"name": "Product.price_min, Product.price_max, Product.currency",
+				"in": "body",
+				"type": "number, number, string",
+				"description": "Prices in major units. `price_max` defaults to `price_min`."
+			},
+			{
+				"name": "Product.in_stock",
+				"in": "body",
+				"type": "boolean",
+				"default": "true",
+				"description": "Whether it can be bought now."
+			},
+			{
+				"name": "ships_to",
+				"in": "body",
+				"type": "string[]",
+				"description": "Two-letter country codes. Applied when the list differs from the one you sent last, so an owner's edit survives an unchanged push."
+			},
+			{
+				"name": "ships_from",
+				"in": "body",
+				"type": "string",
+				"description": "A two-letter country code. Used until the owner saves their own."
+			},
+			{
+				"name": "payment_methods",
+				"in": "body",
+				"type": "(card | crypto | bankTransfer | zelle | cashApp | venmo | paypal | other)[]",
+				"description": "How buyers pay. Used only while the store has none saved."
+			}
+		],
+		"response": {
+			"store": "example-store",
+			"products": 120,
+			"mapped": 97,
+			"skipped": 2
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the store:catalog scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold store:catalog."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "The request body is not valid JSON or does not match this endpoint.",
+				"code": "invalid_body",
+				"when": "The body is not valid JSON or fails validation. `error.details` lists the problems per field."
+			},
+			{
+				"status": 400,
+				"error": "store takes the store's slug, like example-store, not a UUID.",
+				"code": "uuid_not_accepted",
+				"when": "`store` is a UUID. Stores are addressed by slug."
+			},
+			{
+				"status": 404,
+				"error": "This key does not reach that store.",
+				"code": "store_not_found",
+				"when": "`store` is not one of the key's live stores."
+			},
+			{
+				"status": 400,
+				"error": "Idempotency-Key must be 1 to 200 characters.",
+				"code": "invalid_idempotency_key",
+				"when": "The `Idempotency-Key` header is empty or longer."
+			},
+			{
+				"status": 409,
+				"error": "A request with this Idempotency-Key is still running. Retry in a moment.",
+				"code": "idempotency_key_in_progress",
+				"when": "The first request with this key has not finished. Retry it."
+			},
+			{
+				"status": 422,
+				"error": "This Idempotency-Key was sent with a different body. Use a new key for a new request.",
+				"code": "idempotency_key_reused",
+				"when": "The key was used in the last 24 hours with another body."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes PUT only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"Leave out `ships_to`, `ships_from`, or `payment_methods` to keep what the store has.",
+			"`mapped` counts the products matched to a compound in the library. Once you send a catalog, we stop reading it from your site.",
+			"Send a new `Idempotency-Key` for each call and the same one when you retry it, and a retry after a timeout or a 5xx is never applied twice. Keys are per store, the body is compared with its keys sorted, and a failed call stores nothing, so its retry runs again."
+		]
+	},
+	{
+		"handler": "heartbeat",
+		"title": "Report your integration",
+		"method": "POST",
+		"path": "/api/v1/heartbeat",
+		"audience": "owner",
+		"auth": "apiKey",
+		"scope": "store:write",
+		"rateLimited": true,
+		"summary": "Tells us which SDK version your store runs and what it does, so the dashboard can show the connection and name anything missing.",
+		"params": [
+			{
+				"name": "Idempotency-Key",
+				"in": "header",
+				"type": "string",
+				"description": "1 to 200 characters. A repeat with the same key and body within 24 hours gets the first answer and changes nothing."
+			},
+			{
+				"name": "store",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The store's slug."
+			},
+			{
+				"name": "sdk_version",
+				"in": "body",
+				"type": "string",
+				"description": "The SDK's version."
+			},
+			{
+				"name": "packages",
+				"in": "body",
+				"type": "{ [name]: version }",
+				"description": "Up to 50 installed packages and their versions."
+			},
+			{
+				"name": "framework, runtime",
+				"in": "body",
+				"type": "string",
+				"description": "Like `next@16.4.2` and `node@22.11.0`."
+			},
+			{
+				"name": "capabilities",
+				"in": "body",
+				"type": "(orders | attribution | reviewsSeen | catalog | webhooks | jsonLd)[]",
+				"description": "What the install does. Values we do not know are dropped."
+			}
+		],
+		"response": {
+			"store": "example-store",
+			"received_at": "2026-11-03T16:00:00.000Z"
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the store:write scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold store:write."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "The request body is not valid JSON or does not match this endpoint.",
+				"code": "invalid_body",
+				"when": "The body is not valid JSON or fails validation. `error.details` lists the problems per field."
+			},
+			{
+				"status": 400,
+				"error": "store takes the store's slug, like example-store, not a UUID.",
+				"code": "uuid_not_accepted",
+				"when": "`store` is a UUID. Stores are addressed by slug."
+			},
+			{
+				"status": 404,
+				"error": "This key does not reach that store.",
+				"code": "store_not_found",
+				"when": "`store` is not one of the key's live stores."
+			},
+			{
+				"status": 400,
+				"error": "Idempotency-Key must be 1 to 200 characters.",
+				"code": "invalid_idempotency_key",
+				"when": "The `Idempotency-Key` header is empty or longer."
+			},
+			{
+				"status": 409,
+				"error": "A request with this Idempotency-Key is still running. Retry in a moment.",
+				"code": "idempotency_key_in_progress",
+				"when": "The first request with this key has not finished. Retry it."
+			},
+			{
+				"status": 422,
+				"error": "This Idempotency-Key was sent with a different body. Use a new key for a new request.",
+				"code": "idempotency_key_reused",
+				"when": "The key was used in the last 24 hours with another body."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes POST only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"The SDK sends one when it starts and once a day. A field you leave out keeps what we have.",
+			"An empty `capabilities` list keeps the stored one, so `init` can check in before the install reports what it does. A list with values replaces it.",
+			"Send a new `Idempotency-Key` for each call and the same one when you retry it, and a retry after a timeout or a 5xx is never applied twice. Keys are per store, the body is compared with its keys sorted, and a failed call stores nothing, so its retry runs again."
+		]
+	},
+	{
+		"handler": "stores",
+		"title": "Vendor directory",
+		"method": "GET",
+		"path": "/api/v1/stores",
+		"audience": "directory",
+		"auth": "apiKey",
+		"scope": "stores:read",
+		"rateLimited": true,
+		"summary": "Every store partners may show, ranked. A store is listed while its public page is on and its owner is on the Growth or Professional plan.",
+		"params": [
+			{
+				"name": "search",
+				"in": "query",
+				"type": "string",
+				"description": "Only stores whose name contains this. It never matches products or countries."
+			},
+			{
+				"name": "min_rating",
+				"in": "query",
+				"type": "number",
+				"description": "Only stores whose `score` is at least this, 0 to 5."
+			},
+			{
+				"name": "compound",
+				"in": "query",
+				"type": "string",
+				"description": "A compound slug, name, or alias from the Partner library. Only stores with an active product that maps to it."
+			},
+			{
+				"name": "ships_to",
+				"in": "query",
+				"type": "string",
+				"description": "A two-letter country code. Only stores that list it. A store that lists no countries is left out."
+			},
+			{
+				"name": "payment",
+				"in": "query",
+				"type": "card | crypto | bankTransfer | zelle | cashApp | venmo | paypal | other",
+				"description": "Only stores that take this payment method."
+			},
+			{
+				"name": "in_stock",
+				"in": "query",
+				"type": "boolean",
+				"default": "false",
+				"description": "With `compound`, only stores that have a matching product in stock."
+			},
+			{
+				"name": "sort",
+				"in": "query",
+				"type": "best | reviews | rating | name",
+				"default": "best",
+				"description": "`best` weighs the score by review volume; `rating` is the score alone."
+			},
+			{
+				"name": "limit",
+				"in": "query",
+				"type": "integer",
+				"default": "20",
+				"description": "Results per page, 1 to 100."
+			},
+			{
+				"name": "cursor",
+				"in": "query",
+				"type": "string",
+				"description": "`next_cursor` from the previous page. Send the same other parameters with it."
+			}
+		],
+		"response": {
+			"stores": [
+				{
+					"slug": "example-store",
+					"name": "Example Store",
+					"description": "Research peptides, tested in the US.",
+					"website_url": "https://store.example",
+					"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+					"accent_color": "#1f6feb",
+					"rating": 4.78,
+					"review_count": 128,
+					"verified_review_count": 117,
+					"ships_from": "US",
+					"ships_to": [
+						"CA",
+						"GB",
+						"US"
+					],
+					"payment_methods": [
+						"card",
+						"crypto"
+					],
+					"coa_url": "https://store.example/lab-results",
+					"catalog_synced_at": "2026-10-30T03:31:12.000Z",
+					"score": 4.71,
+					"profile_url": "https://pepreviewpro.com/vendors/example-store?utm_source=partner&utm_medium=partner",
+					"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMCJ9.Zk2pQ9vR2mT8sLwYc1bNx7Uf",
+					"matched_products": [
+						{
+							"ref": "sku-102",
+							"name": "BPC-157 10mg",
+							"page_url": "https://store.example/product/sku-102",
+							"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMCIsInByb2R1Y3RJZCI6IjBiNmYyYTdlIn0.q3V9mXcT2bLr8nWkP4sYd1Ae",
+							"image_url": "https://cdn.pepreviewpro.com/products/00000000-0000-4000-8000-000000000001/412/3f1c.webp",
+							"price_min": 89,
+							"price_max": 89,
+							"currency": "USD",
+							"in_stock": true,
+							"review_count": 14,
+							"store": {
+								"slug": "example-store",
+								"name": "Example Store",
+								"website_url": "https://store.example"
+							}
+						}
+					],
+					"matched_product_count": 4
+				}
+			],
+			"total": 1,
+			"next_cursor": null,
+			"filters": {
+				"compound": {
+					"slug": "bpc-157",
+					"name": "BPC-157"
+				},
+				"unknown_compound": false,
+				"ships_to": "GB",
+				"payment": null,
+				"in_stock": false,
+				"min_rating": null
+			}
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the stores:read scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold stores:read."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "sort must be best, reviews, rating, or name.",
+				"code": "invalid_sort",
+				"when": "`sort` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "limit must be a whole number from 1 to 100.",
+				"code": "invalid_limit",
+				"when": "`limit` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "cursor is not one this endpoint sent. Start again without it.",
+				"code": "invalid_cursor",
+				"when": "`cursor` is not a `next_cursor` this endpoint sent."
+			},
+			{
+				"status": 400,
+				"error": "ships_to must be a two-letter country code, like GB.",
+				"code": "invalid_ships_to",
+				"when": "`ships_to` is not a country code."
+			},
+			{
+				"status": 400,
+				"error": "payment must be one of: card, crypto, bankTransfer, zelle, cashApp, venmo, paypal, other.",
+				"code": "invalid_payment",
+				"when": "`payment` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "in_stock must be true or false.",
+				"code": "invalid_in_stock",
+				"when": "`in_stock` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "min_rating must be a number from 0 to 5.",
+				"code": "invalid_min_rating",
+				"when": "`min_rating` is anything else."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes GET only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"`total` counts the stores left after every filter, `min_rating` included.",
+			"`rating` is the stores' average star rating. `score` is the PepReviewPro score that `min_rating` and `sort=rating` compare.",
+			"`matched_products` is there only when `compound` was passed: up to three of the store's matching products, in stock first, then cheapest. `matched_product_count` beside it counts all of them, so you can tell a store has more.",
+			"`ships_to` is empty when a store has not listed its countries. That means unknown, so a `ships_to` filter leaves the store out.",
+			"A `compound` outside the library matches nothing and answers an empty list, with `filters.unknown_compound` true.",
+			"`filters` echoes what was applied: the compound as the library names it, or null, and the other filters as read, null when not passed. `unknown_compound` is true when `compound` was passed and is not in the library, so an empty list means we do not know the compound rather than that no store has it.",
+			"On a partner key, send buyers to `click_url` rather than `website_url` or `page_url`. It goes to the store or product through PepReviewPro, so the store sees the visit came from you. Keys not linked to a partner get no `click_url`.",
+			"`click_url` is a `/go/` link on pepreviewpro.com, signed for your partner name. It names the store or product, never a web address, and the destination is read when the buyer clicks. A store that has left the directory sends the buyer to PepReviewPro's directory instead.",
+			"To land the buyer on a particular page, add `to` to a `click_url`: `?to=` and the page's address, URL-encoded. `to` is honored only for an http or https address on the store's own host, the host of its `website_url`, or a subdomain of it, ignoring `www.`. Any other `to` is ignored and the link goes where it would without it. The click is credited to you either way.",
+			"`profile_url` is the store's PepReviewPro page. On a partner key it carries your partner name as `utm_source`.",
+			"On a partner key, each store in a response counts once as served in that store's insights. Until you report what you showed with /partner-events, those reads count as impressions."
+		]
+	},
+	{
+		"handler": "products",
+		"title": "Products by compound",
+		"method": "GET",
+		"path": "/api/v1/products",
+		"audience": "directory",
+		"auth": "apiKey",
+		"scope": "stores:read",
+		"rateLimited": true,
+		"summary": "Every product partners may show for one compound, with its store. Only stores on the Growth or Professional plan are included.",
+		"params": [
+			{
+				"name": "compound",
+				"in": "query",
+				"type": "string",
+				"required": true,
+				"description": "A compound slug, name, or alias from the Partner library."
+			},
+			{
+				"name": "ships_to",
+				"in": "query",
+				"type": "string",
+				"description": "A two-letter country code. Only stores that list it. A store that lists no countries is left out."
+			},
+			{
+				"name": "payment",
+				"in": "query",
+				"type": "card | crypto | bankTransfer | zelle | cashApp | venmo | paypal | other",
+				"description": "Only stores that take this payment method."
+			},
+			{
+				"name": "in_stock",
+				"in": "query",
+				"type": "boolean",
+				"default": "false",
+				"description": "Only products the store has in stock."
+			},
+			{
+				"name": "min_rating",
+				"in": "query",
+				"type": "number",
+				"description": "Only products from stores whose `score` is at least this, 0 to 5."
+			},
+			{
+				"name": "store",
+				"in": "query",
+				"type": "string",
+				"description": "Only products from these stores: one or more store slugs, comma separated, like `example-store`. Applied before paging, so `total` counts only their products."
+			},
+			{
+				"name": "sort",
+				"in": "query",
+				"type": "best | price | rating",
+				"default": "best",
+				"description": "`best` ranks by the store's score weighed by review volume, then price. `price` is cheapest first."
+			},
+			{
+				"name": "limit",
+				"in": "query",
+				"type": "integer",
+				"default": "20",
+				"description": "Results per page, 1 to 100."
+			},
+			{
+				"name": "cursor",
+				"in": "query",
+				"type": "string",
+				"description": "`next_cursor` from the previous page. Send the same other parameters with it."
+			}
+		],
+		"response": {
+			"products": [
+				{
+					"ref": "sku-102",
+					"name": "BPC-157 10mg",
+					"page_url": "https://store.example/product/sku-102",
+					"click_url": "https://pepreviewpro.com/go/eyJzaXRlSWQiOiIwMDAwMDAwMCIsInByb2R1Y3RJZCI6IjBiNmYyYTdlIn0.q3V9mXcT2bLr8nWkP4sYd1Ae",
+					"image_url": "https://cdn.pepreviewpro.com/products/00000000-0000-4000-8000-000000000001/412/3f1c.webp",
+					"price_min": 89,
+					"price_max": 89,
+					"currency": "USD",
+					"in_stock": true,
+					"review_count": 14,
+					"store": {
+						"slug": "example-store",
+						"name": "Example Store",
+						"website_url": "https://store.example"
+					}
+				}
+			],
+			"total": 1,
+			"next_cursor": null,
+			"filters": {
+				"compound": {
+					"slug": "bpc-157",
+					"name": "BPC-157"
+				},
+				"unknown_compound": false,
+				"ships_to": null,
+				"payment": null,
+				"in_stock": false,
+				"min_rating": null
+			}
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the stores:read scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold stores:read."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "compound is required.",
+				"code": "missing_compound",
+				"when": "No `compound`."
+			},
+			{
+				"status": 400,
+				"error": "sort must be best, price, or rating.",
+				"code": "invalid_sort",
+				"when": "`sort` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "limit must be a whole number from 1 to 100.",
+				"code": "invalid_limit",
+				"when": "`limit` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "cursor is not one this endpoint sent. Start again without it.",
+				"code": "invalid_cursor",
+				"when": "`cursor` is not a `next_cursor` this endpoint sent."
+			},
+			{
+				"status": 400,
+				"error": "ships_to must be a two-letter country code, like GB.",
+				"code": "invalid_ships_to",
+				"when": "`ships_to` is not a country code."
+			},
+			{
+				"status": 400,
+				"error": "payment must be one of: card, crypto, bankTransfer, zelle, cashApp, venmo, paypal, other.",
+				"code": "invalid_payment",
+				"when": "`payment` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "in_stock must be true or false.",
+				"code": "invalid_in_stock",
+				"when": "`in_stock` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "min_rating must be a number from 0 to 5.",
+				"code": "invalid_min_rating",
+				"when": "`min_rating` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "store takes the store's slug, like example-store, not a UUID.",
+				"code": "uuid_not_accepted",
+				"when": "A `store` slug is a UUID. Stores are addressed by slug."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes GET only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"`ref` is the store's own id for the product. Prices are in the store's own currency, in major units.",
+			"`total` counts every product that matches. An empty list means nothing qualifies. Filters are never dropped to fill it.",
+			"A `store` slug that is not a partner store matches nothing.",
+			"Each product's `store` carries the store's `website_url`. A `to` on a `click_url` must be on that host.",
+			"A product's `click_url` goes to the product page, or to the store when the product is gone by the time it is clicked.",
+			"`filters` echoes what was applied: the compound as the library names it, or null, and the other filters as read, null when not passed. `unknown_compound` is true when `compound` was passed and is not in the library, so an empty list means we do not know the compound rather than that no store has it.",
+			"On a partner key, send buyers to `click_url` rather than `website_url` or `page_url`. It goes to the store or product through PepReviewPro, so the store sees the visit came from you. Keys not linked to a partner get no `click_url`.",
+			"`click_url` is a `/go/` link on pepreviewpro.com, signed for your partner name. It names the store or product, never a web address, and the destination is read when the buyer clicks. A store that has left the directory sends the buyer to PepReviewPro's directory instead.",
+			"To land the buyer on a particular page, add `to` to a `click_url`: `?to=` and the page's address, URL-encoded. `to` is honored only for an http or https address on the store's own host, the host of its `website_url`, or a subdomain of it, ignoring `www.`. Any other `to` is ignored and the link goes where it would without it. The click is credited to you either way.",
+			"`profile_url` is the store's PepReviewPro page. On a partner key it carries your partner name as `utm_source`.",
+			"On a partner key, each store in a response counts once as served in that store's insights. Until you report what you showed with /partner-events, those reads count as impressions."
+		]
+	},
+	{
+		"handler": "reviews",
+		"title": "Directory reviews",
+		"method": "GET",
+		"path": "/api/v1/reviews",
+		"audience": "directory",
+		"auth": "apiKey",
+		"scope": "reviews:read",
+		"rateLimited": true,
+		"summary": "Approved reviews from every store in the vendor directory feed, or one of them, newest first.",
+		"params": [
+			{
+				"name": "store",
+				"in": "query",
+				"type": "string",
+				"description": "The slug of a store in the vendor directory feed."
+			},
+			{
+				"name": "min_rating",
+				"in": "query",
+				"type": "number",
+				"description": "Only reviews rated at least this."
+			},
+			{
+				"name": "limit",
+				"in": "query",
+				"type": "integer",
+				"default": "20",
+				"description": "Results per page, 1 to 100."
+			},
+			{
+				"name": "cursor",
+				"in": "query",
+				"type": "string",
+				"description": "`next_cursor` from the previous page. Send the same other parameters with it."
+			}
+		],
+		"response": {
+			"reviews": [
+				{
+					"id": "00000000-0000-4000-8000-000000000003",
+					"store": "example-store",
+					"product_ref": "sku-102",
+					"rating": 5,
+					"title": "Fast and careful",
+					"body": "Arrived in two days, packed cold, and matched the certificate of analysis.",
+					"author": "Riley K.",
+					"verified": true,
+					"created_at": "2026-10-03T14:21:07.512Z",
+					"updated_at": "2026-10-04T09:12:44.001Z"
+				}
+			],
+			"next_cursor": "eyJvIjoyMH0"
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the reviews:read scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold reviews:read."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "limit must be a whole number from 1 to 100.",
+				"code": "invalid_limit",
+				"when": "`limit` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "cursor is not one this endpoint sent. Start again without it.",
+				"code": "invalid_cursor",
+				"when": "`cursor` is not a `next_cursor` this endpoint sent."
+			},
+			{
+				"status": 400,
+				"error": "min_rating must be a number from 0 to 5.",
+				"code": "invalid_min_rating",
+				"when": "`min_rating` is anything else."
+			},
+			{
+				"status": 400,
+				"error": "store takes the store's slug, like example-store, not a UUID.",
+				"code": "uuid_not_accepted",
+				"when": "`store` is a UUID. Stores are addressed by slug."
+			},
+			{
+				"status": 404,
+				"error": "No store in the partner directory has that slug.",
+				"code": "store_not_found",
+				"when": "`store` is not in the vendor directory feed."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes GET only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"The order is fixed, newest first, and there is no product filter.",
+			"Reviews here carry no `order_ref`."
+		]
+	},
+	{
+		"handler": "vendorMiss",
+		"title": "Report a store you could not show",
+		"method": "POST",
+		"path": "/api/v1/vendor-miss",
+		"audience": "directory",
+		"auth": "apiKey",
+		"scope": "partner:write",
+		"rateLimited": true,
+		"summary": "Tells us your user asked about a store you could not show, so we can invite it. Send it whenever a store name finds nothing.",
+		"params": [
+			{
+				"name": "Idempotency-Key",
+				"in": "header",
+				"type": "string",
+				"description": "1 to 200 characters. A repeat with the same key and body within 24 hours gets the first answer and changes nothing."
+			},
+			{
+				"name": "name",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The store's name as your user wrote it. We keep the first 120 characters."
+			},
+			{
+				"name": "url",
+				"in": "body",
+				"type": "string",
+				"description": "The store's address, when your user pasted one."
+			},
+			{
+				"name": "question",
+				"in": "body",
+				"type": "string",
+				"description": "Your user's question as they asked it. We keep the first 200 characters. Leave out anything that identifies them."
+			}
+		],
+		"response": {
+			"in_directory": false,
+			"listed_with_partners": false
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the partner:write scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold partner:write."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "The request body is not valid JSON or does not match this endpoint.",
+				"code": "invalid_body",
+				"when": "The body is not a JSON object."
+			},
+			{
+				"status": 400,
+				"error": "name is required.",
+				"code": "missing_name",
+				"when": "No `name`, or only spaces."
+			},
+			{
+				"status": 400,
+				"error": "Idempotency-Key must be 1 to 200 characters.",
+				"code": "invalid_idempotency_key",
+				"when": "The `Idempotency-Key` header is empty or longer."
+			},
+			{
+				"status": 409,
+				"error": "A request with this Idempotency-Key is still running. Retry in a moment.",
+				"code": "idempotency_key_in_progress",
+				"when": "The first request with this key has not finished. Retry it."
+			},
+			{
+				"status": 422,
+				"error": "This Idempotency-Key was sent with a different body. Use a new key for a new request.",
+				"code": "idempotency_key_reused",
+				"when": "The key was used in the last 24 hours with another body."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes POST only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"`in_directory` is true for a store on PepReviewPro. `listed_with_partners` is true when partners may show it, so a search missed it.",
+			"Tell your user only that the store is not reviewed on PepReviewPro.",
+			"A `name` over 120 characters is cut to 120 and recorded.",
+			"Send a new `Idempotency-Key` for each call and the same one when you retry it, and a retry after a timeout or a 5xx is never applied twice. Keys are per account, the body is compared with its keys sorted, and a failed call stores nothing, so its retry runs again."
+		]
+	},
+	{
+		"handler": "partnerEvents",
+		"title": "Report what you showed",
+		"method": "POST",
+		"path": "/api/v1/partner-events",
+		"audience": "directory",
+		"auth": "apiKey",
+		"scope": "partner:write",
+		"rateLimited": true,
+		"summary": "Tells us which stores you showed your users, and the clicks you sent to a store without `click_url`. Stores see these figures in their insights. Partner keys only.",
+		"params": [
+			{
+				"name": "Idempotency-Key",
+				"in": "header",
+				"type": "string",
+				"description": "1 to 200 characters. A repeat with the same key and body within 24 hours gets the first answer and changes nothing."
+			},
+			{
+				"name": "events",
+				"in": "body",
+				"type": "array",
+				"required": true,
+				"description": "Up to 50 events. Each is an object with the fields below."
+			},
+			{
+				"name": "events[].id",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "Your own id for the event, 1 to 100 characters. An id you already sent in the last 7 days counts as a duplicate."
+			},
+			{
+				"name": "events[].type",
+				"in": "body",
+				"type": "shown | click",
+				"required": true,
+				"description": "`shown` for a store you showed. `click` for a buyer you sent to the store by a link other than `click_url`."
+			},
+			{
+				"name": "events[].store",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The store's `slug` from /stores or /products."
+			},
+			{
+				"name": "events[].product_ref",
+				"in": "body",
+				"type": "string",
+				"description": "The product's `ref` from /products, when a click went to a product."
+			},
+			{
+				"name": "events[].compound",
+				"in": "body",
+				"type": "string",
+				"description": "The compound your user asked about: a slug, name, or alias."
+			},
+			{
+				"name": "events[].placement",
+				"in": "body",
+				"type": "storeHeader | storeAbout | directoryCard | finderProduct | finderStore | offerCard | returnToStore",
+				"description": "Where the link was, like `finderProduct` or `finderStore`."
+			}
+		],
+		"response": {
+			"recorded": 2,
+			"duplicates": 1,
+			"skipped": 0
+		},
+		"errors": [
+			{
+				"status": 401,
+				"error": "Send an API key in the Authorization header.",
+				"code": "missing_api_key",
+				"when": "No Authorization or X-Api-Key header."
+			},
+			{
+				"status": 401,
+				"error": "This API key is not valid.",
+				"code": "invalid_api_key",
+				"when": "The key does not match any issued key."
+			},
+			{
+				"status": 401,
+				"error": "This API key has been revoked.",
+				"code": "revoked_api_key",
+				"when": "The key was revoked."
+			},
+			{
+				"status": 401,
+				"error": "This API key has expired.",
+				"code": "expired_api_key",
+				"when": "The key is past its expiry date."
+			},
+			{
+				"status": 403,
+				"error": "This API key does not have the partner:write scope.",
+				"code": "insufficient_scope",
+				"when": "The key does not hold partner:write."
+			},
+			{
+				"status": 403,
+				"error": "This endpoint takes partner keys only. Ask us to link your key to your partner account.",
+				"code": "not_partner_key",
+				"when": "The key is not linked to a partner."
+			},
+			{
+				"status": 429,
+				"error": "This key sent too many requests in one second. Retry after the seconds in Retry-After.",
+				"code": "rate_limited",
+				"when": "More than 20 requests in one second from this key."
+			},
+			{
+				"status": 429,
+				"error": "This account has used its monthly request quota. It resets on the first of the month, UTC.",
+				"code": "monthly_quota_exceeded",
+				"when": "The account's `pk_live_` keys made 10,000 requests this calendar month (UTC). `Retry-After` counts the seconds to the reset. Store keys have no monthly quota."
+			},
+			{
+				"status": 400,
+				"error": "events must be an array.",
+				"code": "invalid_events",
+				"when": "The body has no `events` list."
+			},
+			{
+				"status": 400,
+				"error": "Send at most 50 events per call.",
+				"code": "too_many_events",
+				"when": "`events` has more than 50 items."
+			},
+			{
+				"status": 400,
+				"error": "Idempotency-Key must be 1 to 200 characters.",
+				"code": "invalid_idempotency_key",
+				"when": "The `Idempotency-Key` header is empty or longer."
+			},
+			{
+				"status": 409,
+				"error": "A request with this Idempotency-Key is still running. Retry in a moment.",
+				"code": "idempotency_key_in_progress",
+				"when": "The first request with this key has not finished. Retry it."
+			},
+			{
+				"status": 422,
+				"error": "This Idempotency-Key was sent with a different body. Use a new key for a new request.",
+				"code": "idempotency_key_reused",
+				"when": "The key was used in the last 24 hours with another body."
+			},
+			{
+				"status": 405,
+				"error": "This endpoint takes POST only.",
+				"code": "method_not_allowed",
+				"when": "Any other HTTP method. Checked before the key."
+			},
+			{
+				"status": 500,
+				"error": "Something failed on our side. Retry with backoff, and quote the request id if it keeps failing.",
+				"code": "internal_error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"Safe to call without waiting. An event with no `id`, no `type`, or an unknown `store` is skipped and counted in `skipped`. An optional field that is malformed is dropped, and the event still counts.",
+			"`duplicates` counts events whose `id` you already sent in the last 7 days, or that repeat an `id` within the call. They are not counted again.",
+			"Once you report `shown` events, they are your impressions in each store's insights, and your API reads stop counting. If you send none for 7 days, your reads count again.",
+			"Use `click_url` wherever you can. A `click` event counts the visit, but its order cannot be matched to you.",
+			"Send a new `Idempotency-Key` for each call and the same one when you retry it, and a retry after a timeout or a 5xx is never applied twice. Keys are per account, the body is compared with its keys sorted, and a failed call stores nothing, so its retry runs again."
+		]
+	},
+	{
+		"handler": "widgetData",
+		"title": "Widget data",
+		"method": "GET",
+		"path": "/api/v1/widget-data",
+		"legacyPath": "/functions/v1/get-widget-data",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "What the review widgets render: store branding, widget settings, recent reviews, and the aggregate.",
+		"params": [
+			{
+				"name": "site_id",
+				"in": "query",
+				"type": "string",
+				"required": true,
+				"description": "The store's slug or id."
+			},
+			{
+				"name": "product_id",
+				"in": "query",
+				"type": "integer",
+				"description": "Only this product's reviews and aggregate. Digits only."
+			},
+			{
+				"name": "product_ref",
+				"in": "query",
+				"type": "string | integer",
+				"description": "Your own id for the product, as your orders and catalog send it. Used instead of `product_id`. One we have never seen matches no reviews."
+			},
+			{
+				"name": "limit",
+				"in": "query",
+				"type": "integer",
+				"default": "20",
+				"description": "Reviews to send, 1 to 50."
+			}
+		],
+		"response": {
+			"success": true,
+			"requested_site_id": "example-store",
+			"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+			"store": {
+				"id": "00000000-0000-4000-8000-000000000001",
+				"slug": "example-store",
+				"name": "Example Store",
+				"accent_color": "#1f6feb",
+				"widget_logo_url": null,
+				"public_page_enabled": true,
+				"app_url": "https://pepreviewpro.com"
+			},
+			"settings": {
+				"theme": "light",
+				"autoplay_speed": 5,
+				"ticker_speed": 8,
+				"show_aggregate": true,
+				"show_distribution": true,
+				"show_verified_badge": true,
+				"min_rating_display": 1,
+				"cache_bust_token": "2026-10-01T09:00:00.000000+00:00"
+			},
+			"reviews": [
+				{
+					"id": "00000000-0000-4000-8000-000000000003",
+					"reviewer_name": "Riley K.",
+					"rating": 5,
+					"title": "Fast and careful",
+					"body": "Arrived in two days, packed cold, and matched the certificate of analysis.",
+					"is_verified": true,
+					"created_at": "2026-10-03T14:21:07.512934+00:00",
+					"product_ref": "88",
+					"order_ref": null,
+					"updated_at": "2026-10-04T09:12:44.001207+00:00"
+				}
+			],
+			"aggregate": {
+				"average_rating": 4.78,
+				"score": 4.71,
+				"total": 128,
+				"distribution": {
+					"1": 0,
+					"2": 1,
+					"3": 2,
+					"4": 21,
+					"5": 104
+				}
+			}
+		},
+		"errors": [
+			{
+				"status": 400,
+				"error": "site_id is required",
+				"when": "No `site_id`."
+			},
+			{
+				"status": 404,
+				"error": "Store not found",
+				"when": "No live store has that slug or id."
+			},
+			{
+				"status": 500,
+				"error": "Internal server error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"Errors on the public endpoints say `message`, not `error`.",
+			"Responses are never cached. `X-Store-Scope` echoes `site_id`.",
+			"Each review's `product_ref` is your own product id. `order_ref` is always null here, since anyone can read this response."
+		]
+	},
+	{
+		"handler": "storeReviews",
+		"title": "Store reviews (deprecated)",
+		"method": "GET",
+		"path": "/api/v1/store-reviews",
+		"legacyPath": "/functions/v1/get-reviews",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "A page of one store's approved reviews. Use /my-reviews with a key instead.",
+		"params": [
+			{
+				"name": "site_id",
+				"in": "query",
+				"type": "string",
+				"required": true,
+				"description": "The store's slug or id."
+			},
+			{
+				"name": "product_id",
+				"in": "query",
+				"type": "integer",
+				"description": "Only this product's reviews and aggregate."
+			},
+			{
+				"name": "page",
+				"in": "query",
+				"type": "integer",
+				"default": "1",
+				"description": "Page number."
+			},
+			{
+				"name": "per_page",
+				"in": "query",
+				"type": "integer",
+				"default": "20",
+				"description": "Reviews per page, up to 200."
+			},
+			{
+				"name": "sort",
+				"in": "query",
+				"type": "newest | highest | lowest",
+				"default": "newest",
+				"description": "Anything else sorts newest first."
+			},
+			{
+				"name": "verified_only",
+				"in": "query",
+				"type": "boolean",
+				"default": "false",
+				"description": "Only purchase-verified reviews."
+			}
+		],
+		"response": {
+			"success": true,
+			"requested_site_id": "example-store",
+			"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+			"reviews": [
+				{
+					"id": "00000000-0000-4000-8000-000000000003",
+					"reviewer_name": "Riley K.",
+					"rating": 5,
+					"title": "Fast and careful",
+					"body": "Arrived in two days, packed cold, and matched the certificate of analysis.",
+					"is_verified": true,
+					"created_at": "2026-10-03T14:21:07.512934+00:00"
+				}
+			],
+			"aggregate": {
+				"average_rating": 4.78,
+				"score": 4.71,
+				"total": 128,
+				"verified": 117,
+				"distribution": {
+					"1": 0,
+					"2": 1,
+					"3": 2,
+					"4": 21,
+					"5": 104
+				}
+			},
+			"page": 1,
+			"per_page": 20,
+			"total_count": 128,
+			"deprecated": true
+		},
+		"errors": [
+			{
+				"status": 400,
+				"error": "site_id is required",
+				"when": "No `site_id`."
+			},
+			{
+				"status": 404,
+				"error": "Store not found",
+				"when": "No live store has that slug or id."
+			},
+			{
+				"status": 500,
+				"error": "Internal server error",
+				"when": "Something failed on our side."
+			}
+		],
+		"notes": [
+			"`total_count` counts every approved review, even with `verified_only`.",
+			"Responses carry `Deprecation: true`."
+		]
+	},
+	{
+		"handler": "storeProfile",
+		"title": "Store profile",
+		"method": "GET",
+		"path": "/api/v1/store-profile",
+		"legacyPath": "/functions/v1/get-store-profile",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "A store's public branding and widget settings.",
+		"params": [
+			{
+				"name": "site_id",
+				"in": "query",
+				"type": "string",
+				"required": true,
+				"description": "The store's slug or id."
+			}
+		],
+		"response": {
+			"success": true,
+			"requested_site_id": "example-store",
+			"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+			"store": {
+				"id": "00000000-0000-4000-8000-000000000001",
+				"slug": "example-store",
+				"name": "Example Store",
+				"wp_url": "https://store.example",
+				"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+				"widget_logo_url": null,
+				"banner_url": null,
+				"accent_color": "#1f6feb",
+				"business_description": "Research peptides, tested in the US."
+			},
+			"widget_settings": null
+		},
+		"errors": [
+			{
+				"status": 400,
+				"error": "site_id is required",
+				"when": "No `site_id`."
+			},
+			{
+				"status": 403,
+				"error": "Store profile is not public",
+				"when": "The store's public page is off."
+			},
+			{
+				"status": 404,
+				"error": "Store not found",
+				"when": "No live store has that slug or id."
+			},
+			{
+				"status": 500,
+				"error": "Internal server error",
+				"when": "Something failed on our side."
+			}
+		]
+	},
+	{
+		"handler": "submitReview",
+		"title": "Submit a review",
+		"method": "POST",
+		"path": "/api/v1/submit-review",
+		"legacyPath": "/functions/v1/submit-review",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "The review form on store sites. The review waits until its author confirms it from the email we send.",
+		"params": [
+			{
+				"name": "site_id",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The store's id."
+			},
+			{
+				"name": "reviewer_name",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "Shown as first name and last initial."
+			},
+			{
+				"name": "reviewer_email",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "Where the confirmation link goes. Never shown."
+			},
+			{
+				"name": "rating",
+				"in": "body",
+				"type": "integer",
+				"required": true,
+				"description": "1 to 5."
+			},
+			{
+				"name": "body",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The review text."
+			},
+			{
+				"name": "title",
+				"in": "body",
+				"type": "string",
+				"description": "Accepted but ignored. We write the headline from the review text."
+			},
+			{
+				"name": "product_id",
+				"in": "body",
+				"type": "integer",
+				"description": "The product reviewed. Leave it out for a store review."
+			},
+			{
+				"name": "order_id",
+				"in": "body",
+				"type": "integer",
+				"description": "The order it came from, when known."
+			},
+			{
+				"name": "product_ref",
+				"in": "body",
+				"type": "string | integer",
+				"description": "Your own product id. Used when `product_id` is left out."
+			},
+			{
+				"name": "order_ref",
+				"in": "body",
+				"type": "string | integer",
+				"description": "Your own order id. Used when `order_id` is left out."
+			}
+		],
+		"response": {
+			"success": true,
+			"message": "Thank you! Please check your email to verify your review.",
+			"review_id": "00000000-0000-4000-8000-000000000003"
+		},
+		"errors": [
+			{
+				"status": 400,
+				"error": "Missing required fields",
+				"when": "A required field is empty."
+			},
+			{
+				"status": 400,
+				"error": "Rating must be between 1 and 5",
+				"when": "`rating` is out of range."
+			},
+			{
+				"status": 500,
+				"error": "Failed to save review",
+				"when": "The review could not be saved."
+			},
+			{
+				"status": 500,
+				"error": "Internal server error",
+				"when": "The body is not JSON."
+			}
+		],
+		"notes": [
+			"`site_id: \"demo\"` answers success without saving anything. The homepage form uses it."
+		]
+	},
+	{
+		"handler": "verifyReview",
+		"title": "Confirm a review",
+		"method": "GET",
+		"path": "/verify-review",
+		"legacyPath": "/functions/v1/verify-review",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "The link in the confirmation email. Redirects to /thank-you.",
+		"params": [
+			{
+				"name": "token",
+				"in": "query",
+				"type": "string",
+				"required": true,
+				"description": "From the email."
+			}
+		],
+		"response": "302 to https://pepreviewpro.com/thank-you",
+		"errors": [
+			{
+				"status": 400,
+				"error": "Missing token",
+				"when": "No `token`. Plain text."
+			},
+			{
+				"status": 404,
+				"error": "Invalid or expired verification token",
+				"when": "No review has that token. Plain text."
+			},
+			{
+				"status": 200,
+				"error": "Review already verified",
+				"when": "The link was already used. Plain text."
+			}
+		]
+	},
+	{
+		"handler": "vendors",
+		"title": "Verified vendors",
+		"method": "GET",
+		"path": "/api/v1/vendors",
+		"legacyPath": "/functions/v1/list-vendors",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "The public directory, ranked by `rank_score`, which also counts the share of purchase-verified reviews.",
+		"params": [
+			{
+				"name": "Authorization",
+				"in": "header",
+				"type": "string",
+				"description": "Optional. A partner's key, as `Bearer pk_live_…`, counts each store as served in its insights. The answer is the same without one."
+			}
+		],
+		"response": {
+			"success": true,
+			"vendors": [
+				{
+					"id": "00000000-0000-4000-8000-000000000001",
+					"name": "Example Store",
+					"slug": "example-store",
+					"logo_url": "https://cdn.pepreviewpro.com/logos/prime-store.png",
+					"accent_color": "#1f6feb",
+					"business_description": "Research peptides, tested in the US.",
+					"wp_url": "https://store.example",
+					"review_count": 128,
+					"verified_review_count": 117,
+					"avg_rating": 4.78,
+					"score": 4.71,
+					"rank_score": 10.1237
+				}
+			]
+		},
+		"errors": [
+			{
+				"status": 500,
+				"error": "Internal server error",
+				"when": "Something failed on our side. `message` carries it."
+			}
+		],
+		"notes": [
+			"Cached for 60 seconds."
+		]
+	},
+	{
+		"handler": "unsubscribe",
+		"title": "Unsubscribe",
+		"method": "POST",
+		"path": "/api/v1/unsubscribe",
+		"legacyPath": "/functions/v1/unsubscribe",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "One-click unsubscribe from review request emails. Mail clients post here from the List-Unsubscribe header.",
+		"params": [
+			{
+				"name": "token",
+				"in": "query",
+				"type": "string",
+				"required": true,
+				"description": "The email's id, from the link. A JSON body `{ token }` also works."
+			}
+		],
+		"response": {
+			"ok": true
+		},
+		"errors": [
+			{
+				"status": 400,
+				"error": "This link is not valid.",
+				"when": "The token is missing or malformed."
+			},
+			{
+				"status": 404,
+				"error": "This link is not valid.",
+				"when": "No email has that id."
+			},
+			{
+				"status": 500,
+				"error": "Something went wrong. Please try again.",
+				"when": "The opt-out could not be saved."
+			},
+			{
+				"status": 405,
+				"error": "Method not allowed",
+				"when": "Anything but GET or POST."
+			}
+		],
+		"notes": [
+			"Errors here say `error` and success says `ok`, unlike the other public endpoints.",
+			"A GET never unsubscribes. It answers 303 to the `/unsubscribe` page, where the reader confirms, because some mail clients open the link instead of posting to it."
+		]
+	},
+	{
+		"handler": "affiliateClick",
+		"title": "Affiliate click",
+		"method": "POST",
+		"path": "/api/v1/affiliate/click",
+		"legacyPath": "/functions/v1/affiliate-click",
+		"audience": "public",
+		"auth": "none",
+		"scope": null,
+		"rateLimited": false,
+		"summary": "Records a click on a vendor offer. Add the returned `click_id` to the vendor link as `prp_click_id`.",
+		"params": [
+			{
+				"name": "vendor_key",
+				"in": "body",
+				"type": "string",
+				"required": true,
+				"description": "The vendor's slug. `store_name` or `store_slug` also work."
+			},
+			{
+				"name": "site_id",
+				"in": "body",
+				"type": "string",
+				"description": "The store's id, when known."
+			},
+			{
+				"name": "offer_code",
+				"in": "body",
+				"type": "string",
+				"description": "Defaults to the offer's code."
+			},
+			{
+				"name": "placement",
+				"in": "body",
+				"type": "string",
+				"description": "Where the offer was shown, like store_profile."
+			},
+			{
+				"name": "session_id, landing_path, referrer, utm_*",
+				"in": "body",
+				"type": "string",
+				"description": "Attribution for reporting."
+			}
+		],
+		"response": {
+			"success": true,
+			"click_id": "00000000-0000-4000-8000-000000000018"
+		},
+		"errors": [
+			{
+				"status": 400,
+				"error": "vendor_key is required",
+				"when": "No vendor named."
+			},
+			{
+				"status": 500,
+				"error": "Failed to record click",
+				"when": "The click could not be saved."
+			},
+			{
+				"status": 405,
+				"error": "Method not allowed",
+				"when": "Anything but POST."
+			}
+		]
+	}
+]

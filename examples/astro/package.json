@@ -1,0 +1,23 @@
+{
+	"name": "example-astro",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "astro build",
+		"dev": "astro dev",
+		"test": "node test.mjs"
+	},
+	"dependencies": {
+		"@astrojs/react": "^7.1.2",
+		"@pepreviewpro/react": "workspace:*",
+		"@pepreviewpro/server": "workspace:*",
+		"astro": "^7.4.4",
+		"react": "19.3.1",
+		"react-dom": "19.3.1"
+	},
+	"devDependencies": {
+		"@types/react": "^19.3.0",
+		"@types/react-dom": "^19.3.0",
+		"typescript": "6.0.3"
+	}
+}

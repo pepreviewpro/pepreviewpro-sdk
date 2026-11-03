@@ -1,0 +1,338 @@
+{
+	"endpoint": "reviews",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "directory reviews, newest first",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000003",
+							"store": "example-store",
+							"product_ref": "88",
+							"rating": 5,
+							"title": "Review 1",
+							"body": "Body of review 1. Shipped fast and matched the label.",
+							"author": "Riley K.",
+							"verified": true,
+							"created_at": "2026-10-03T14:21:07.512Z",
+							"updated_at": "2026-10-03T14:21:07.512Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000004",
+							"store": "example-store",
+							"product_ref": "88",
+							"rating": 4,
+							"title": null,
+							"body": "Body of review 2. Shipped fast and matched the label.",
+							"author": "Sam D.",
+							"verified": true,
+							"created_at": "2026-10-02T09:05:41.100Z",
+							"updated_at": "2026-10-02T09:05:41.100Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000005",
+							"store": "example-store",
+							"product_ref": null,
+							"rating": 5,
+							"title": "Review 3",
+							"body": "Body of review 3. Shipped fast and matched the label.",
+							"author": "Kai S.",
+							"verified": false,
+							"created_at": "2026-10-01T18:00:00.000Z",
+							"updated_at": "2026-10-01T18:00:00.000Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000006",
+							"store": "example-store",
+							"product_ref": "91",
+							"rating": 2,
+							"title": null,
+							"body": "Body of review 4. Shipped fast and matched the label.",
+							"author": "Sam T.",
+							"verified": true,
+							"created_at": "2026-09-28T07:30:12.000Z",
+							"updated_at": "2026-09-28T07:30:12.000Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000007",
+							"store": "example-store",
+							"product_ref": null,
+							"rating": 3,
+							"title": "Review 5",
+							"body": "Body of review 5. Shipped fast and matched the label.",
+							"author": "Lane L.",
+							"verified": false,
+							"created_at": "2026-09-20T22:10:59.999Z",
+							"updated_at": "2026-09-20T22:10:59.999Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000011",
+							"store": "olive-store",
+							"product_ref": null,
+							"rating": 5,
+							"title": "Review 9",
+							"body": "Body of review 9. Shipped fast and matched the label.",
+							"author": "Lee W.",
+							"verified": true,
+							"created_at": "2026-07-01T08:00:00.000Z",
+							"updated_at": "2026-07-01T08:00:00.000Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000012",
+							"store": "olive-store",
+							"product_ref": null,
+							"rating": 4,
+							"title": null,
+							"body": "Body of review 10. Shipped fast and matched the label.",
+							"author": "Avery S.",
+							"verified": true,
+							"created_at": "2026-06-30T08:00:00.000Z",
+							"updated_at": "2026-06-30T08:00:00.000Z"
+						}
+					],
+					"next_cursor": null
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "one store with a minimum rating",
+			"request": {
+				"method": "GET",
+				"query": "store=olive-store&min_rating=5",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000011",
+							"store": "olive-store",
+							"product_ref": null,
+							"rating": 5,
+							"title": "Review 9",
+							"body": "Body of review 9. Shipped fast and matched the label.",
+							"author": "Lee W.",
+							"verified": true,
+							"created_at": "2026-07-01T08:00:00.000Z",
+							"updated_at": "2026-07-01T08:00:00.000Z"
+						}
+					],
+					"next_cursor": null
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a private store is not in the directory",
+			"request": {
+				"method": "GET",
+				"query": "store=laurel-store",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 404,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "store_not_found",
+						"message": "No store in the partner directory has that slug.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a uuid is refused",
+			"request": {
+				"method": "GET",
+				"query": "store=00000000-0000-4000-8000-000000000002",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "uuid_not_accepted",
+						"message": "store takes the store's slug, like example-store, not a UUID.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "two at a time, with a cursor to the next",
+			"request": {
+				"method": "GET",
+				"query": "limit=2",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000003",
+							"store": "example-store",
+							"product_ref": "88",
+							"rating": 5,
+							"title": "Review 1",
+							"body": "Body of review 1. Shipped fast and matched the label.",
+							"author": "Riley K.",
+							"verified": true,
+							"created_at": "2026-10-03T14:21:07.512Z",
+							"updated_at": "2026-10-03T14:21:07.512Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000004",
+							"store": "example-store",
+							"product_ref": "88",
+							"rating": 4,
+							"title": null,
+							"body": "Body of review 2. Shipped fast and matched the label.",
+							"author": "Sam D.",
+							"verified": true,
+							"created_at": "2026-10-02T09:05:41.100Z",
+							"updated_at": "2026-10-02T09:05:41.100Z"
+						}
+					],
+					"next_cursor": "eyJvIjoyfQ"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "the next two from the cursor",
+			"request": {
+				"method": "GET",
+				"query": "limit=2&cursor=eyJvIjoyfQ",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000005",
+							"store": "example-store",
+							"product_ref": null,
+							"rating": 5,
+							"title": "Review 3",
+							"body": "Body of review 3. Shipped fast and matched the label.",
+							"author": "Kai S.",
+							"verified": false,
+							"created_at": "2026-10-01T18:00:00.000Z",
+							"updated_at": "2026-10-01T18:00:00.000Z"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000006",
+							"store": "example-store",
+							"product_ref": "91",
+							"rating": 2,
+							"title": null,
+							"body": "Body of review 4. Shipped fast and matched the label.",
+							"author": "Sam T.",
+							"verified": true,
+							"created_at": "2026-09-28T07:30:12.000Z",
+							"updated_at": "2026-09-28T07:30:12.000Z"
+						}
+					],
+					"next_cursor": "eyJvIjo0fQ"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a min_rating that is not a number",
+			"request": {
+				"method": "GET",
+				"query": "min_rating=five",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_min_rating",
+						"message": "min_rating must be a number from 0 to 5.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

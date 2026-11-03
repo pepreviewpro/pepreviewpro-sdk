@@ -1,0 +1,256 @@
+{
+	"endpoint": "me",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "an old-system key reads itself and this month's usage",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}"
+				}
+			},
+			"setup": {
+				"usage": {
+					"user": "owner",
+					"count": 3
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"key": {
+						"id": "00000000-0000-4000-8000-000000000013",
+						"key_prefix": "pk_live_Ex01",
+						"key_type": "public",
+						"scopes": [
+							"me:read",
+							"store:read",
+							"store:reviews",
+							"store:orders"
+						]
+					},
+					"limits": {
+						"rate_per_second": 20,
+						"monthly_quota": 10000,
+						"used_this_month": 3,
+						"remaining_this_month": 9997
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "X-Api-Key works when there is no bearer token",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"X-Api-Key": "{{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"key": {
+						"id": "00000000-0000-4000-8000-000000000014",
+						"key_prefix": "pk_live_Ex02",
+						"key_type": "public",
+						"scopes": [
+							"me:read",
+							"stores:read",
+							"reviews:read",
+							"partner:write"
+						]
+					},
+					"limits": {
+						"rate_per_second": 20,
+						"monthly_quota": 10000,
+						"used_this_month": 0,
+						"remaining_this_month": 10000
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "no key",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {}
+			},
+			"response": {
+				"status": 401,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "missing_api_key",
+						"message": "Send an API key in the Authorization header.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an unknown key",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer pk_live_nope"
+				}
+			},
+			"response": {
+				"status": 401,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_api_key",
+						"message": "This API key is not valid.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a revoked key",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{REVOKED_KEY}}"
+				}
+			},
+			"response": {
+				"status": 401,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "revoked_api_key",
+						"message": "This API key has been revoked.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an expired key",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{EXPIRED_KEY}}"
+				}
+			},
+			"response": {
+				"status": 401,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "expired_api_key",
+						"message": "This API key has expired.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key without the scope",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PLUGIN_KEY}}"
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "insufficient_scope",
+						"message": "This API key does not have the me:read scope.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "the wrong method, before the key is read",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {}
+			},
+			"response": {
+				"status": 405,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "method_not_allowed",
+						"message": "This endpoint takes GET only.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

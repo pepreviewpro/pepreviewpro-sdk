@@ -1,0 +1,15 @@
+packages:
+ - packages/*
+ - examples/*
+
+# allowBuilds is the pnpm 11+ spelling; onlyBuiltDependencies is kept for pnpm 10.
+allowBuilds:
+ esbuild: true
+
+onlyBuiltDependencies:
+ - esbuild
+
+minimumReleaseAgeExclude:
+ - "@vitest/mocker@5.1.0"
+ - "@vitest/spy@5.1.0"
+ - vitest@5.1.0

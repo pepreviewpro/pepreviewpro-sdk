@@ -1,0 +1,20 @@
+node_modules
+dist
+.next
+.astro
+.react-router
+examples/remix/build
+test-results
+playwright-report
+docs/api
+.snippets
+coverage
+*.tsbuildinfo
+*.tgz
+.npmrc
+.DS_Store
+*.pepreviewpro-checkpoint.json
+next-env.d.ts
+# Env files hold keys. The examples commit theirs on purpose: a store slug and comments, nothing secret.
+.env*
+!examples/*/.env

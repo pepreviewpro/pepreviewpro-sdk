@@ -1,0 +1,17 @@
+{
+	"name": "example-express-stripe",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"start": "tsx src/server.ts"
+	},
+	"dependencies": {
+		"@pepreviewpro/server": "workspace:*",
+		"express": "^5.3.0",
+		"stripe": "^23.1.0"
+	},
+	"devDependencies": {
+		"@types/express": "^5.0.6",
+		"tsx": "^4.23.15"
+	}
+}

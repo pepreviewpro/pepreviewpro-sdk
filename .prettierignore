@@ -1,0 +1,16 @@
+dist
+node_modules
+pnpm-lock.yaml
+coverage
+.changeset/*.md
+test/fixtures/api/*.json
+test/fixtures/apiEndpoints.json
+.next
+.astro
+.react-router
+examples/remix/build
+test-results
+playwright-report
+docs/api
+next-env.d.ts
+.snippets

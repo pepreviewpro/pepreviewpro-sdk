@@ -1,0 +1,60 @@
+{
+	"name": "@pepreviewpro/ai",
+	"version": "0.1.0",
+	"description": "A find-vendors tool for the Vercel AI SDK: PepReviewPro's directory, with tracked links, for chat assistants that list stores.",
+	"license": "SEE LICENSE IN LICENSE",
+	"author": "PepReviewPro <support@pepreviewpro.com>",
+	"homepage": "https://pepreviewpro.com/help/create-an-api-key",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pepreviewpro/pepreviewpro-sdk.git",
+		"directory": "packages/ai"
+	},
+	"bugs": {
+		"email": "support@pepreviewpro.com"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"AGENTS.md",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown"
+	},
+	"dependencies": {
+		"@pepreviewpro/server": "workspace:*"
+	},
+	"peerDependencies": {
+		"ai": "^7.0.0",
+		"zod": "^4.1.8"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"pepreviewpro",
+		"ai",
+		"ai-sdk",
+		"tool",
+		"directory"
+	],
+	"devDependencies": {
+		"ai": "^7.0.159",
+		"zod": "^4.6.7"
+	}
+}

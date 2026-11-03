@@ -1,0 +1,444 @@
+{
+	"endpoint": "vendor-miss",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "a store that is not on PepReviewPro",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"name": "Juniper Store",
+					"url": "https://juniper-store.example",
+					"question": "Is Juniper Store a good place to buy BPC-157?"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"in_directory": false,
+					"listed_with_partners": false
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store on PepReviewPro that a search missed",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"name": "Olive Store"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"in_directory": true,
+					"listed_with_partners": true
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store on PepReviewPro that partners cannot show",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"name": "Magnolia Store"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"in_directory": true,
+					"listed_with_partners": false
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a name over 120 characters is cut to 120, not refused",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"name": "Juniper Store Juniper Store Juniper Store Juniper Store Juniper Store Juniper Store Juniper Store Juniper Store Juniper Store Juniper Store"
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"in_directory": false,
+					"listed_with_partners": false
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a repeated Idempotency-Key gets the first answer without running again",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json",
+					"Idempotency-Key": "miss-0001"
+				},
+				"body": {
+					"name": "Juniper Store"
+				}
+			},
+			"setup": {
+				"idempotency": {
+					"user": "partner",
+					"endpoint": "POST /api/v1/vendor-miss",
+					"key": "miss-0001",
+					"status": 200,
+					"body": {
+						"in_directory": true,
+						"listed_with_partners": false
+					}
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"in_directory": true,
+					"listed_with_partners": false
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an Idempotency-Key over 200 characters",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json",
+					"Idempotency-Key": "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+				},
+				"body": {
+					"name": "Juniper Store"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_idempotency_key",
+						"message": "Idempotency-Key must be 1 to 200 characters.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "no name",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"name": "  "
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "missing_name",
+						"message": "name is required.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a body that is not an object",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": [
+					"Juniper Store"
+				]
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_body",
+						"message": "The request body is not valid JSON or does not match this endpoint.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key without partner:write",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"name": "Juniper Store"
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "insufficient_scope",
+						"message": "This API key does not have the partner:write scope.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "GET is not allowed",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 405,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "method_not_allowed",
+						"message": "This endpoint takes POST only.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "the same Idempotency-Key with another body",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json",
+					"Idempotency-Key": "miss-0002"
+				},
+				"body": {
+					"name": "Juniper Store"
+				}
+			},
+			"setup": {
+				"idempotency": {
+					"user": "partner",
+					"endpoint": "POST /api/v1/vendor-miss",
+					"key": "miss-0002",
+					"status": 200,
+					"body": {
+						"in_directory": false,
+						"listed_with_partners": false
+					},
+					"requestHash": "0000000000000000000000000000000000000000000000000000000000000000"
+				}
+			},
+			"response": {
+				"status": 422,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "idempotency_key_reused",
+						"message": "This Idempotency-Key was sent with a different body. Use a new key for a new request.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "the same Idempotency-Key while the first is still running",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json",
+					"Idempotency-Key": "miss-0003"
+				},
+				"body": {
+					"name": "Juniper Store"
+				}
+			},
+			"setup": {
+				"idempotency": {
+					"user": "partner",
+					"endpoint": "POST /api/v1/vendor-miss",
+					"key": "miss-0003",
+					"status": null,
+					"body": null
+				}
+			},
+			"response": {
+				"status": 409,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "idempotency_key_in_progress",
+						"message": "A request with this Idempotency-Key is still running. Retry in a moment.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an empty Idempotency-Key",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json",
+					"Idempotency-Key": ""
+				},
+				"body": {
+					"name": "Juniper Store"
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_idempotency_key",
+						"message": "Idempotency-Key must be 1 to 200 characters.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

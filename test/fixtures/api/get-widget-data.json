@@ -1,0 +1,511 @@
+{
+	"endpoint": "get-widget-data",
+	"source": "written from the old edge function source; replace with a recording before cutover",
+	"cases": [
+		{
+			"name": "by slug, with the store's minimum rating applied",
+			"request": {
+				"method": "GET",
+				"query": "site_id=example-store",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"cache-control": "no-store, no-cache, must-revalidate",
+					"vary": "Origin, X-Store-Scope",
+					"x-store-scope": "example-store"
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "example-store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000001",
+						"slug": "example-store",
+						"name": "Example Store",
+						"accent_color": "#1f6feb",
+						"widget_logo_url": null,
+						"public_page_enabled": true,
+						"app_url": "https://pepreviewpro.com"
+					},
+					"settings": {
+						"theme": "dark",
+						"autoplay_speed": 7,
+						"ticker_speed": 12,
+						"show_aggregate": true,
+						"show_distribution": true,
+						"show_verified_badge": true,
+						"min_rating_display": 2,
+						"cache_bust_token": "2026-10-01T09:00:00.123456+00:00"
+					},
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000003",
+							"reviewer_name": "Riley K.",
+							"rating": 5,
+							"title": "Review 1",
+							"body": "Body of review 1. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-10-03T14:21:07.512934+00:00"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000004",
+							"reviewer_name": "Sam D.",
+							"rating": 4,
+							"title": null,
+							"body": "Body of review 2. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-10-02T09:05:41.1+00:00"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000005",
+							"reviewer_name": "Kai S.",
+							"rating": 5,
+							"title": "Review 3",
+							"body": "Body of review 3. Shipped fast and matched the label.",
+							"is_verified": false,
+							"created_at": "2026-10-01T18:00:00+00:00"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000006",
+							"reviewer_name": "Sam T.",
+							"rating": 2,
+							"title": null,
+							"body": "Body of review 4. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-09-28T07:30:12.00025+00:00"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000007",
+							"reviewer_name": "Lane L.",
+							"rating": 3,
+							"title": "Review 5",
+							"body": "Body of review 5. Shipped fast and matched the label.",
+							"is_verified": false,
+							"created_at": "2026-09-20T22:10:59.999999+00:00"
+						}
+					],
+					"aggregate": {
+						"average_rating": 3.8,
+						"score": 3.61,
+						"total": 5,
+						"distribution": {
+							"1": 0,
+							"2": 1,
+							"3": 1,
+							"4": 1,
+							"5": 2
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"cache-control",
+				"vary",
+				"x-store-scope"
+			]
+		},
+		{
+			"name": "by uuid, one product, limited",
+			"request": {
+				"method": "GET",
+				"query": "site_id=00000000-0000-4000-8000-000000000001&product_id=88&limit=1",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"x-store-scope": "00000000-0000-4000-8000-000000000001"
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "00000000-0000-4000-8000-000000000001",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000001",
+						"slug": "example-store",
+						"name": "Example Store",
+						"accent_color": "#1f6feb",
+						"widget_logo_url": null,
+						"public_page_enabled": true,
+						"app_url": "https://pepreviewpro.com"
+					},
+					"settings": {
+						"theme": "dark",
+						"autoplay_speed": 7,
+						"ticker_speed": 12,
+						"show_aggregate": true,
+						"show_distribution": true,
+						"show_verified_badge": true,
+						"min_rating_display": 2,
+						"cache_bust_token": "2026-10-01T09:00:00.123456+00:00"
+					},
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000003",
+							"reviewer_name": "Riley K.",
+							"rating": 5,
+							"title": "Review 1",
+							"body": "Body of review 1. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-10-03T14:21:07.512934+00:00"
+						}
+					],
+					"aggregate": {
+						"average_rating": 4.5,
+						"score": 3.77,
+						"total": 2,
+						"distribution": {
+							"1": 0,
+							"2": 0,
+							"3": 0,
+							"4": 1,
+							"5": 1
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"x-store-scope"
+			]
+		},
+		{
+			"name": "a private store still serves its widgets",
+			"request": {
+				"method": "GET",
+				"query": "site_id=laurel-store&product_id=sku-104",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"x-store-scope": "laurel-store"
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "laurel-store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000008",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000008",
+						"slug": "laurel-store",
+						"name": "laurel Store",
+						"accent_color": null,
+						"widget_logo_url": null,
+						"public_page_enabled": false,
+						"app_url": "https://pepreviewpro.com"
+					},
+					"settings": null,
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000009",
+							"reviewer_name": "Riley P.",
+							"rating": 4,
+							"title": "Review 7",
+							"body": "Body of review 7. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-08-15T10:00:00.5+00:00"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000010",
+							"reviewer_name": "Sam R.",
+							"rating": 1,
+							"title": null,
+							"body": "Body of review 8. Shipped fast and matched the label.",
+							"is_verified": false,
+							"created_at": "2026-08-14T10:00:00+00:00"
+						}
+					],
+					"aggregate": {
+						"average_rating": 2.5,
+						"score": 3.4,
+						"total": 2,
+						"distribution": {
+							"1": 1,
+							"2": 0,
+							"3": 0,
+							"4": 1,
+							"5": 0
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"x-store-scope"
+			]
+		},
+		{
+			"name": "an old name-derived key",
+			"request": {
+				"method": "GET",
+				"query": "site_id=olive-store",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "olive-store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000002",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000002",
+						"slug": "olive-store",
+						"name": "Olive Store",
+						"accent_color": "#c0392b",
+						"widget_logo_url": "https://cdn.pepreviewpro.com/logos/plus-mark.png",
+						"public_page_enabled": true,
+						"app_url": "https://pepreviewpro.com"
+					},
+					"settings": null,
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000011",
+							"reviewer_name": "Lee W.",
+							"rating": 5,
+							"title": "Review 9",
+							"body": "Body of review 9. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-07-01T08:00:00+00:00"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000012",
+							"reviewer_name": "Avery S.",
+							"rating": 4,
+							"title": null,
+							"body": "Body of review 10. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-06-30T08:00:00+00:00"
+						}
+					],
+					"aggregate": {
+						"average_rating": 4.5,
+						"score": 3.74,
+						"total": 2,
+						"distribution": {
+							"1": 0,
+							"2": 0,
+							"3": 0,
+							"4": 1,
+							"5": 1
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "no site_id",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"message": "site_id is required"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an unknown store",
+			"request": {
+				"method": "GET",
+				"query": "site_id=nope",
+				"headers": {}
+			},
+			"response": {
+				"status": 404,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"success": false,
+					"message": "Store not found"
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an integer product_ref filters like product_id",
+			"request": {
+				"method": "GET",
+				"query": "site_id=example-store&product_ref=88",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"cache-control": "no-store, no-cache, must-revalidate",
+					"vary": "Origin, X-Store-Scope",
+					"x-store-scope": "example-store"
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "example-store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000001",
+						"slug": "example-store",
+						"name": "Example Store",
+						"accent_color": "#1f6feb",
+						"widget_logo_url": null,
+						"public_page_enabled": true,
+						"app_url": "https://pepreviewpro.com"
+					},
+					"settings": {
+						"theme": "dark",
+						"autoplay_speed": 7,
+						"ticker_speed": 12,
+						"show_aggregate": true,
+						"show_distribution": true,
+						"show_verified_badge": true,
+						"min_rating_display": 2,
+						"cache_bust_token": "2026-10-01T09:00:00.123456+00:00"
+					},
+					"reviews": [
+						{
+							"id": "00000000-0000-4000-8000-000000000003",
+							"reviewer_name": "Riley K.",
+							"rating": 5,
+							"title": "Review 1",
+							"body": "Body of review 1. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-10-03T14:21:07.512934+00:00",
+							"product_ref": "88",
+							"order_ref": null,
+							"updated_at": "2026-10-03T14:21:07.512934+00:00"
+						},
+						{
+							"id": "00000000-0000-4000-8000-000000000004",
+							"reviewer_name": "Sam D.",
+							"rating": 4,
+							"title": null,
+							"body": "Body of review 2. Shipped fast and matched the label.",
+							"is_verified": true,
+							"created_at": "2026-10-02T09:05:41.1+00:00",
+							"product_ref": "88",
+							"order_ref": null,
+							"updated_at": "2026-10-02T09:05:41.1+00:00"
+						}
+					],
+					"aggregate": {
+						"average_rating": 4.5,
+						"score": 3.77,
+						"total": 2,
+						"distribution": {
+							"1": 0,
+							"2": 0,
+							"3": 0,
+							"4": 1,
+							"5": 1
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"cache-control",
+				"vary",
+				"x-store-scope"
+			]
+		},
+		{
+			"name": "a product_ref the store never sent matches nothing",
+			"request": {
+				"method": "GET",
+				"query": "site_id=example-store&product_ref=sku-102",
+				"headers": {}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*",
+					"cache-control": "no-store, no-cache, must-revalidate",
+					"vary": "Origin, X-Store-Scope",
+					"x-store-scope": "example-store"
+				},
+				"body": {
+					"success": true,
+					"requested_site_id": "example-store",
+					"resolved_site_id": "00000000-0000-4000-8000-000000000001",
+					"store": {
+						"id": "00000000-0000-4000-8000-000000000001",
+						"slug": "example-store",
+						"name": "Example Store",
+						"accent_color": "#1f6feb",
+						"widget_logo_url": null,
+						"public_page_enabled": true,
+						"app_url": "https://pepreviewpro.com"
+					},
+					"settings": {
+						"theme": "dark",
+						"autoplay_speed": 7,
+						"ticker_speed": 12,
+						"show_aggregate": true,
+						"show_distribution": true,
+						"show_verified_badge": true,
+						"min_rating_display": 2,
+						"cache_bust_token": "2026-10-01T09:00:00.123456+00:00"
+					},
+					"reviews": [],
+					"aggregate": {
+						"average_rating": 0,
+						"score": 0,
+						"total": 0,
+						"distribution": {
+							"1": 0,
+							"2": 0,
+							"3": 0,
+							"4": 0,
+							"5": 0
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin",
+				"cache-control",
+				"vary",
+				"x-store-scope"
+			]
+		}
+	]
+}

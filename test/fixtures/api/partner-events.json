@@ -1,0 +1,703 @@
+{
+	"endpoint": "partner-events",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "shown stores and a click are recorded, an unknown store and a bad type are skipped",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"events": [
+						{
+							"id": "evt-1",
+							"type": "shown",
+							"compound": "bpc-157",
+							"placement": "finderStore",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-2",
+							"type": "shown",
+							"compound": "BPC-157",
+							"store": "olive-store"
+						},
+						{
+							"id": "evt-3",
+							"type": "click",
+							"placement": "finderProduct",
+							"store": "example-store",
+							"product_ref": "88"
+						},
+						{
+							"id": "evt-4",
+							"type": "shown",
+							"store": "juniper-store"
+						},
+						{
+							"id": "evt-5",
+							"type": "seen",
+							"store": "example-store"
+						}
+					]
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"recorded": 3,
+					"duplicates": 0,
+					"skipped": 2
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a malformed optional field is dropped and the event still counts",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"events": [
+						{
+							"id": "evt-1",
+							"type": "click",
+							"placement": "nowhere",
+							"store": "example-store",
+							"product_ref": {
+								"id": 88
+							}
+						}
+					]
+				}
+			},
+			"setup": {
+				"catalog": true
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"recorded": 1,
+					"duplicates": 0,
+					"skipped": 0
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a repeated Idempotency-Key gets the first answer without running again",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json",
+					"Idempotency-Key": "events-0001"
+				},
+				"body": {
+					"events": [
+						{
+							"id": "evt-1",
+							"type": "shown",
+							"store": "example-store"
+						}
+					]
+				}
+			},
+			"setup": {
+				"idempotency": {
+					"user": "partner",
+					"endpoint": "POST /api/v1/partner-events",
+					"key": "events-0001",
+					"status": 200,
+					"body": {
+						"recorded": 1,
+						"duplicates": 0,
+						"skipped": 0
+					}
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"skipped": 0,
+					"recorded": 1,
+					"duplicates": 0
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an Idempotency-Key over 200 characters",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json",
+					"Idempotency-Key": "kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"
+				},
+				"body": {
+					"events": []
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_idempotency_key",
+						"message": "Idempotency-Key must be 1 to 200 characters.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key with no partner",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"events": [
+						{
+							"id": "evt-1",
+							"type": "shown",
+							"store": "example-store"
+						}
+					]
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "not_partner_key",
+						"message": "This endpoint takes partner keys only. Ask us to link your key to your partner account.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "no events list",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"event": {
+						"type": "shown",
+						"store": "example-store"
+					}
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_events",
+						"message": "events must be an array.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "more than 50 events",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"events": [
+						{
+							"id": "evt-1",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-2",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-3",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-4",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-5",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-6",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-7",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-8",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-9",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-10",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-11",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-12",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-13",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-14",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-15",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-16",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-17",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-18",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-19",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-20",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-21",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-22",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-23",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-24",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-25",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-26",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-27",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-28",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-29",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-30",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-31",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-32",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-33",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-34",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-35",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-36",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-37",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-38",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-39",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-40",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-41",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-42",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-43",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-44",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-45",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-46",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-47",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-48",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-49",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-50",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-51",
+							"type": "shown",
+							"store": "example-store"
+						}
+					]
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "too_many_events",
+						"message": "Send at most 50 events per call.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "GET is not allowed",
+			"request": {
+				"method": "GET",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}"
+				}
+			},
+			"response": {
+				"status": 405,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "method_not_allowed",
+						"message": "This endpoint takes POST only.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an id sent twice in one call counts once",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"events": [
+						{
+							"id": "evt-dup",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-dup",
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "evt-2",
+							"type": "shown",
+							"store": "olive-store"
+						}
+					]
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"recorded": 2,
+					"duplicates": 1,
+					"skipped": 0
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an event with no id is skipped",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{LINKED_PARTNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"events": [
+						{
+							"type": "shown",
+							"store": "example-store"
+						},
+						{
+							"id": "",
+							"type": "shown",
+							"store": "example-store"
+						}
+					]
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"recorded": 0,
+					"duplicates": 0,
+					"skipped": 2
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key without partner:write",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"events": []
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "insufficient_scope",
+						"message": "This API key does not have the partner:write scope.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

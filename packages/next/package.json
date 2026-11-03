@@ -1,0 +1,71 @@
+{
+	"name": "@pepreviewpro/next",
+	"version": "0.1.0",
+	"description": "PepReviewPro for Next.js 15 and 16: cached reviews, JSON-LD, the webhook route, attribution in proxy, and checkout context.",
+	"license": "SEE LICENSE IN LICENSE",
+	"author": "PepReviewPro <support@pepreviewpro.com>",
+	"homepage": "https://pepreviewpro.com/help/connect-a-store-without-wordpress",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pepreviewpro/pepreviewpro-sdk.git",
+		"directory": "packages/next"
+	},
+	"bugs": {
+		"email": "support@pepreviewpro.com"
+	},
+	"type": "module",
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./cache-components": {
+			"types": "./dist/cache-components.d.ts",
+			"default": "./dist/cache-components.js"
+		},
+		"./webhooks": {
+			"types": "./dist/webhooks.d.ts",
+			"default": "./dist/webhooks.js"
+		},
+		"./proxy": {
+			"types": "./dist/proxy.d.ts",
+			"default": "./dist/proxy.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"AGENTS.md",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsdown"
+	},
+	"dependencies": {
+		"@pepreviewpro/browser": "workspace:*",
+		"@pepreviewpro/core": "workspace:*",
+		"@pepreviewpro/react": "workspace:*",
+		"@pepreviewpro/server": "workspace:*"
+	},
+	"peerDependencies": {
+		"next": "^15.0.0 || ^16.0.0",
+		"react": "^18.2.0 || ^19.0.0"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"pepreviewpro",
+		"reviews",
+		"nextjs",
+		"webhooks",
+		"json-ld"
+	]
+}

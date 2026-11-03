@@ -1,0 +1,279 @@
+{
+	"endpoint": "catalog",
+	"source": "Recorded from the app's handlers against the contract seed after the keyed v1 cleanup, 2026-11-03",
+	"cases": [
+		{
+			"name": "saves the catalog, skipping what does not parse",
+			"request": {
+				"method": "PUT",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store",
+					"products": [
+						{
+							"id": "sku-102",
+							"name": "BPC-157 &amp; TB-500 10mg",
+							"short_description": "<p>Lab tested.</p>",
+							"url": "https://store.example/p/epitalon",
+							"image_url": "https://store.example/epitalon.jpg",
+							"price_min": 49.5,
+							"price_max": null,
+							"currency": "USD",
+							"in_stock": true
+						},
+						{
+							"id": 77,
+							"name": "KPV 10mg",
+							"price_min": "89",
+							"price_max": "120",
+							"currency": "USD",
+							"in_stock": false
+						},
+						{
+							"id": "sku-103"
+						}
+					],
+					"ships_to": [
+						"us",
+						"CA",
+						"ZZ"
+					],
+					"ships_from": "US",
+					"payment_methods": [
+						"card",
+						"crypto"
+					]
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"store": "example-store",
+					"products": 2,
+					"mapped": 0,
+					"skipped": 1
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "an empty catalog with shipping left out",
+			"request": {
+				"method": "PUT",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store",
+					"products": []
+				}
+			},
+			"response": {
+				"status": 200,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"store": "example-store",
+					"products": 0,
+					"mapped": 0,
+					"skipped": 0
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a payment method that is not ours",
+			"request": {
+				"method": "PUT",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store",
+					"products": [],
+					"payment_methods": [
+						"stripe"
+					]
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "invalid_body",
+						"message": "The request body is not valid JSON or does not match this endpoint.",
+						"request_id": "contract-request-id",
+						"details": {
+							"formErrors": [],
+							"fieldErrors": {
+								"payment_methods": [
+									"Invalid option: expected one of \"card\"|\"crypto\"|\"bankTransfer\"|\"zelle\"|\"cashApp\"|\"venmo\"|\"paypal\"|\"other\""
+								]
+							}
+						}
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store uuid",
+			"request": {
+				"method": "PUT",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "00000000-0000-4000-8000-000000000001",
+					"products": []
+				}
+			},
+			"response": {
+				"status": 400,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "uuid_not_accepted",
+						"message": "store takes the store's slug, like example-store, not a UUID.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a key without store:catalog",
+			"request": {
+				"method": "PUT",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{OWNER_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store",
+					"products": []
+				}
+			},
+			"response": {
+				"status": 403,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "insufficient_scope",
+						"message": "This API key does not have the store:catalog scope.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "POST is not allowed",
+			"request": {
+				"method": "POST",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "example-store",
+					"products": []
+				}
+			},
+			"response": {
+				"status": 405,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "method_not_allowed",
+						"message": "This endpoint takes PUT only.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		},
+		{
+			"name": "a store the key is not pinned to",
+			"request": {
+				"method": "PUT",
+				"query": "",
+				"headers": {
+					"Authorization": "Bearer {{STORE_KEY}}",
+					"Content-Type": "application/json"
+				},
+				"body": {
+					"store": "laurel-store",
+					"products": []
+				}
+			},
+			"response": {
+				"status": 404,
+				"headers": {
+					"content-type": "application/json",
+					"access-control-allow-origin": "*"
+				},
+				"body": {
+					"error": {
+						"code": "store_not_found",
+						"message": "This key does not reach that store.",
+						"request_id": "contract-request-id"
+					}
+				}
+			},
+			"checkHeaders": [
+				"content-type",
+				"access-control-allow-origin"
+			]
+		}
+	]
+}

@@ -1,0 +1,24 @@
+export type { WidgetAggregate, WidgetData, WidgetReview, WidgetSettings, WidgetStore } from "@pepreviewpro/core";
+export { Carousel } from "./Carousel";
+export { FloatingBadge } from "./FloatingBadge";
+export { PepReviewProProvider, type PepReviewProProviderProps } from "./PepReviewProProvider";
+export { ProductStars } from "./ProductStars";
+export { ReviewForm, type ReviewFormProps } from "./ReviewForm";
+export { ReviewList, type ReviewListProps } from "./ReviewList";
+export { ReviewsJsonLd, type JsonLdProduct, type ReviewsJsonLdProps } from "./ReviewsJsonLd";
+export { ReviewTicker } from "./ReviewTicker";
+export { ReviewWall } from "./ReviewWall";
+export { SidebarPanel } from "./SidebarPanel";
+export { Stars, type StarsProps } from "./Stars";
+export { TrustBadge } from "./TrustBadge";
+export { TrustSeal } from "./TrustSeal";
+export type { ReviewsSource, Theme, WidgetOptions, WidgetProps } from "./types";
+export { useAggregate, type AggregateState } from "./useAggregate";
+export { useReviews, type ReviewsState } from "./useReviews";
+export { useStoreProfile, type StoreProfileState } from "./useStoreProfile";
+export { useSubmitReview, type ReviewInput, type SubmitReviewOptions, type SubmitReviewState, type SubmitStatus } from "./useSubmitReview";
+export type { WidgetDataState } from "./useWidgetData";
+export { validateReview, type ReviewDraft, type ReviewField } from "./validateReview";
+export { VerifiedBadge, type VerifiedBadgeProps } from "./VerifiedBadge";
+
+export const VERSION: string = __PACKAGE_VERSION__;
