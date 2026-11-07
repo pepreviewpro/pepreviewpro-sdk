@@ -1,6 +1,6 @@
 {
 	"name": "@pepreviewpro/next",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "PepReviewPro for Next.js 15 and 16: cached reviews, JSON-LD, the webhook route, attribution in proxy, and checkout context.",
 	"license": "SEE LICENSE IN LICENSE",
 	"author": "PepReviewPro <support@pepreviewpro.com>",

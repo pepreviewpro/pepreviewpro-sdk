@@ -1,6 +1,6 @@
 {
 	"name": "@pepreviewpro/ai",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "A find-vendors tool for the Vercel AI SDK: PepReviewPro's directory, with tracked links, for chat assistants that list stores.",
 	"license": "SEE LICENSE IN LICENSE",
 	"author": "PepReviewPro <support@pepreviewpro.com>",
