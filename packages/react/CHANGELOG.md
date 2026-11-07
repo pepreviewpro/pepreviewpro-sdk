@@ -1,5 +1,16 @@
 # @pepreviewpro/react
 
+## 0.3.0
+
+### Minor Changes
+
+- 469fe9d: Widgets that list reviews, and `useReviews`, now skip reviews with stars but no text, as the dashboard's widgets do. Those reviews still count toward the rating. Every widget and hook on a page now shares one read of the full page of reviews, and `limit` trims what each one shows, so skipped reviews never leave a widget short.
+
+### Patch Changes
+
+- @pepreviewpro/browser@0.3.0
+  - @pepreviewpro/core@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

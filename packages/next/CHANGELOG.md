@@ -1,5 +1,15 @@
 # @pepreviewpro/next
 
+## 0.3.0
+
+### Patch Changes
+
+- Updated dependencies [469fe9d]
+  - @pepreviewpro/react@0.3.0
+  - @pepreviewpro/browser@0.3.0
+  - @pepreviewpro/core@0.3.0
+  - @pepreviewpro/server@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes
