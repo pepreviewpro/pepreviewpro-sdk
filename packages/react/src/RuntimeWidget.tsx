@@ -35,7 +35,7 @@ const VISUALLY_HIDDEN: CSSProperties = {
  */
 export function RuntimeWidget({ type, className, data, store, productRef, limit, theme, ...options }: WidgetProps & { type: RuntimeWidgetType }) {
 	const settings = usePepReviewPro();
-	const { data: loaded } = useWidgetData({ data, store, productRef, limit });
+	const { data: loaded } = useWidgetData({ data, store, productRef });
 	const host = useRef<HTMLDivElement>(null);
 	const [failed, setFailed] = useState(false);
 	const payload = loaded ? runtimePayload(type, loaded, { ...options, limit, theme: theme ?? settings.theme }) : null;

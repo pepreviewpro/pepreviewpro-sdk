@@ -10,7 +10,7 @@ export interface ReviewsSource {
 	store?: string | undefined;
 	/** The store's own product id, for one product's reviews. Leave out for the whole store. */
 	productRef?: ExternalId | undefined;
-	/** Reviews to fetch, 1 to 50. */
+	/** Reviews to show, 1 to 50. */
 	limit?: number | undefined;
 }
 

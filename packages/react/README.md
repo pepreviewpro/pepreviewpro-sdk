@@ -86,7 +86,7 @@ On Next.js, `getReviews` from `@pepreviewpro/next` caches that read and refreshe
 
 ### Widgets
 
-The widgets are `<Carousel>`, `<ReviewWall>`, `<TrustBadge>`, `<FloatingBadge>`, `<ProductStars>`, `<SidebarPanel>`, `<ReviewTicker>`, and `<TrustSeal>`. Each renders the dashboard widget of the same name. They are client components.
+The widgets are `<Carousel>`, `<ReviewWall>`, `<TrustBadge>`, `<FloatingBadge>`, `<ProductStars>`, `<SidebarPanel>`, `<ReviewTicker>`, and `<TrustSeal>`. Each renders the dashboard widget of the same name. They are client components. Widgets that list reviews skip ones with stars but no text. Those still count toward your rating.
 
 Each widget takes:
 
@@ -154,17 +154,17 @@ export function Reviews() {
 }
 ```
 
-| Export                         | What it does                                                                                   |
-| ------------------------------ | ---------------------------------------------------------------------------------------------- |
-| `useReviews(source)`           | `{ reviews, data, loading, error }`. Reviews at or above your store's minimum rating.          |
-| `useAggregate(source)`         | `{ aggregate, data, loading, error }`: the rating, the count, and the star distribution.       |
-| `useStoreProfile({ store })`   | `{ profile, loading, error }`: your public name, logos, banner, accent color, and description. |
-| `useSubmitReview(options)`     | `{ submit, status, error, reset }`, for a form of your own.                                    |
-| `validateReview(draft)`        | The form's own field rules, as `{ field: message }`.                                           |
-| `<Stars rating>`               | Five stars as text, read as one image named by the rating.                                     |
-| `<ReviewList reviews>`         | Reviews as a list of articles: stars, title, body, author, date, verified.                     |
-| `<VerifiedBadge>`              | "Verified purchase".                                                                           |
-| `<ReviewsJsonLd data product>` | Product markup with the rating and up to 10 reviews, for search engines.                       |
+| Export                         | What it does                                                                                                           |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `useReviews(source)`           | `{ reviews, data, loading, error }`. The reviews the widgets list: at or above your store's minimum rating, with text. |
+| `useAggregate(source)`         | `{ aggregate, data, loading, error }`: the rating, the count, and the star distribution.                               |
+| `useStoreProfile({ store })`   | `{ profile, loading, error }`: your public name, logos, banner, accent color, and description.                         |
+| `useSubmitReview(options)`     | `{ submit, status, error, reset }`, for a form of your own.                                                            |
+| `validateReview(draft)`        | The form's own field rules, as `{ field: message }`.                                                                   |
+| `<Stars rating>`               | Five stars as text, read as one image named by the rating.                                                             |
+| `<ReviewList reviews>`         | Reviews as a list of articles: stars, title, body, author, date, verified.                                             |
+| `<VerifiedBadge>`              | "Verified purchase".                                                                                                   |
+| `<ReviewsJsonLd data product>` | Product markup with the rating and up to 10 reviews, for search engines.                                               |
 
 `<Stars>`, `<ReviewList>`, `<VerifiedBadge>`, and `<ReviewsJsonLd>` are Server Components. The widgets, the form, the hooks, and the provider are marked `"use client"`. The hooks fetch in the browser, and several widgets showing the same reviews share one request.
 

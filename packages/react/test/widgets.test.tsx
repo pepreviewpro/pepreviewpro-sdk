@@ -54,6 +54,15 @@ describe("widgets", () => {
 		expect(copy.textContent).toContain(`from ${data.aggregate.total} reviews`);
 	});
 
+	it("leaves star-only reviews out of the copy", () => {
+		const [first, ...rest] = data.reviews.filter((review) => review.rating >= data.settings!.min_rating_display);
+		const html = renderToString(<Carousel data={{ ...data, reviews: [{ ...first!, body: " " }, ...rest] }} limit={1} />);
+		const page = new DOMParser().parseFromString(html, "text/html");
+		const copy = page.querySelector("[data-prp-fallback]")!;
+		expect(copy.textContent).toContain(rest[0]!.body);
+		expect(copy.textContent).not.toContain(first!.reviewer_name);
+	});
+
 	it("lists no reviews in the copy of a widget that shows only the rating", () => {
 		const html = renderToString(<TrustBadge data={data} />);
 		expect(html).not.toContain("data-prp-reviews");
@@ -105,7 +114,9 @@ describe("widgets", () => {
 		);
 		await settle();
 		expect(requests).toHaveLength(1);
-		expect(requests[0]?.url.search).toBe(`?${recorded.request.query}`);
+		const expected = new URLSearchParams(recorded.request.query);
+		expected.set("limit", "50");
+		expect(requests[0]?.url.search).toBe(`?${expected}`);
 		expect(container.querySelectorAll("[data-pepreviews-widget]")).toHaveLength(2);
 		expect(payloadOf(container).data.reviews).toEqual(data.reviews);
 	});
@@ -129,6 +140,17 @@ describe("headless hooks", () => {
 		const shown = body.reviews.filter((review) => review.rating >= body.settings!.min_rating_display).length;
 		expect(container.textContent).toBe(`${shown} of ${body.aggregate.total}`);
 		expect(requests).toHaveLength(1);
+	});
+
+	it("list what the widgets list, trimmed to the limit", async () => {
+		const [first, ...rest] = data.reviews;
+		function Names() {
+			const { reviews } = useReviews({ data: { ...data, reviews: [{ ...first!, body: "" }, ...rest] }, limit: 1 });
+			return <p>{reviews.map((review) => review.reviewer_name).join(", ")}</p>;
+		}
+
+		const container = await render(<Names />);
+		expect(container.textContent).toBe(rest.find((review) => review.rating >= data.settings!.min_rating_display)!.reviewer_name);
 	});
 
 	it("say what is missing without a store", async () => {

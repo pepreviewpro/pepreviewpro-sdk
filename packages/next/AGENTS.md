@@ -275,7 +275,7 @@ export default function Product() {
 
 `prp.reviews.list` reads public data, so page renders never count against the key. Outside Next.js, cache it on your side for a few minutes.
 
-The widgets are `Carousel`, `ReviewWall`, `TrustBadge`, `FloatingBadge`, `ProductStars`, `SidebarPanel`, `ReviewTicker`, and `TrustSeal`. Each takes `data` or `productRef`, plus `theme`, `limit`, `cols`, `minRating`, `link`, `align`, and `className`. For a design of your own, use `useReviews` and `useAggregate` with the unstyled `Stars`, `ReviewList`, and `VerifiedBadge`.
+The widgets are `Carousel`, `ReviewWall`, `TrustBadge`, `FloatingBadge`, `ProductStars`, `SidebarPanel`, `ReviewTicker`, and `TrustSeal`. Each takes `data` or `productRef`, plus `theme`, `limit`, `cols`, `minRating`, `link`, `align`, and `className`. Widgets that list reviews, and `useReviews`, skip reviews with stars but no text; the rating still counts them. For a design of your own, use `useReviews` and `useAggregate` with the unstyled `Stars`, `ReviewList`, and `VerifiedBadge`.
 
 ### Product JSON-LD
 
